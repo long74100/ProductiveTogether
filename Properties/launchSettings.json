@@ -34,8 +34,9 @@
       "useSSL": true
     },
     "Azure Dev Spaces": {
-      "commandName": "AzureDevSpaces",
-      "launchBrowser": true
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger"
     }
   }
 }

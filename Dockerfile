@@ -7,16 +7,19 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["ProductiveTogether/ProductiveTogether.csproj", "ProductiveTogether/"]
-RUN dotnet restore "ProductiveTogether/ProductiveTogether.csproj"
+COPY ["ProductiveTogether/ProductiveTogether.API.csproj", "ProductiveTogether/"]
+COPY ["Contracts/Contracts.csproj", "Contracts/"]
+COPY ["Entities/Entities.csproj", "Entities/"]
+COPY ["Repository/Repository.csproj", "Repository/"]
+RUN dotnet restore "ProductiveTogether/ProductiveTogether.API.csproj"
 COPY . .
 WORKDIR "/src/ProductiveTogether"
-RUN dotnet build "ProductiveTogether.csproj" -c Release -o /app/build
+RUN dotnet build "ProductiveTogether.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ProductiveTogether.csproj" -c Release -o /app/publish
+RUN dotnet publish "ProductiveTogether.API.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ProductiveTogether.dll"]
+ENTRYPOINT ["dotnet", "ProductiveTogether.API.dll"]
