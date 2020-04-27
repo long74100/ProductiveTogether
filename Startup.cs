@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using ProductiveTogether.Models;
 using Microsoft.OpenApi.Models;
+using ProductiveTogether.API.Extensions;
+using Serilog;
 
 namespace ProductiveTogether
 {
@@ -21,8 +21,6 @@ namespace ProductiveTogether
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DailyGoalContext>(opt =>
-               opt.UseInMemoryDatabase("DailyGoalList"));
 
             services.AddControllers();
 
@@ -31,6 +29,17 @@ namespace ProductiveTogether
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
+
+            // CORS
+            services.ConfigureCors();
+
+            // Db context
+            services.ConfigureMySqlContext(Configuration);
+
+            // Repository
+            services.ConfigureRepositoryWrapper();
+
+            services.ConfigureLogging();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +61,9 @@ namespace ProductiveTogether
             });
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseSerilogRequestLogging();
 
             app.UseRouting();
 
