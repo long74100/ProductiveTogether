@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Repository
 {
@@ -20,22 +21,22 @@ namespace Repository
             Create(goal) ;
         }
 
-        public IEnumerable<Goal> GetAllGoals()
+        public async Task<IEnumerable<Goal>> GetAllGoalsAsync()
         {
-            return FindAll().ToList();
+            return await FindAll().ToListAsync();
         }
 
-        public Goal GetGoalById(Guid goalId)
+        public async Task<Goal> GetGoalByIdAsync(Guid goalId)
         {
-            return FindByCondition(goal => goal.Id.Equals(goalId))
-                .FirstOrDefault();
+            return await FindByCondition(goal => goal.Id.Equals(goalId))
+                .FirstOrDefaultAsync();
         }
 
-        public Goal GetGoalWithTasks(Guid goalId)
+        public async Task<Goal> GetGoalWithTasksAsync(Guid goalId)
         {
-            return FindByCondition(goal => goal.Id.Equals(goalId))
+            return await FindByCondition(goal => goal.Id.Equals(goalId))
                 .Include(g => g.Tasks)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
         }
     }
 }
