@@ -6,7 +6,7 @@ namespace Entities.Models
     [Table("goal_task")]
     public class GoalTask
     {
-        public Guid GoalTaskId { get; set; }
+        public Guid Id { get; set; }
 
         [ForeignKey(nameof(Goal))]
         public Guid GoalId { get; set; }

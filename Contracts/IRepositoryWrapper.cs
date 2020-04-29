@@ -8,6 +8,6 @@ namespace Contracts
     {
         IGoalRepository Goal { get; }
         IGoalTaskRepository GoalTask { get; }
-        void save();
+        void Save();
     }
 }

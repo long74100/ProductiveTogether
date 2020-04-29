@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,27 @@ namespace Repository
         {
         }
 
+        public void CreateGoal(Goal goal)
+        {
+            Create(goal) ;
+        }
+
         public IEnumerable<Goal> GetAllGoals()
         {
             return FindAll().ToList();
+        }
+
+        public Goal GetGoalById(Guid goalId)
+        {
+            return FindByCondition(goal => goal.Id.Equals(goalId))
+                .FirstOrDefault();
+        }
+
+        public Goal GetGoalWithTasks(Guid goalId)
+        {
+            return FindByCondition(goal => goal.Id.Equals(goalId))
+                .Include(g => g.Tasks)
+                .FirstOrDefault();
         }
     }
 }

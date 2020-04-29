@@ -8,7 +8,6 @@ namespace Entities
         public RepositoryContext(DbContextOptions options)
             : base(options)
         {
-            this.Database.EnsureCreated();
         }
 
         public DbSet<Goal> Goals { get; set; }

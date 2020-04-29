@@ -16,7 +16,7 @@ namespace Entities.Models
     [Table("goal")]
     public class Goal
     {
-        public Guid GoalId { get; set; }
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Goal type is required")]
         public GoalType GoalType { get; set; }
