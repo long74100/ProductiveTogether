@@ -9,11 +9,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using ProductiveTogether.API.Extensions;
 using Serilog;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace ProductiveTogether
 {
     public class Startup
-    {
+    {   
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,11 +28,8 @@ namespace ProductiveTogether
 
             services.AddControllers();
 
-            // Register the Swagger generator, defining 1 or more Swagger documents
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-            });
+            // Swagger
+            services.ConfigureSwagger();
 
             // CORS
             services.ConfigureCors();
@@ -47,6 +45,11 @@ namespace ProductiveTogether
 
             // Automapper
             services.AddAutoMapper(typeof(Startup));
+
+            // Jwt
+            services.ConfigureIdentity();
+            services.ConfigureJwt(Configuration);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,9 +61,10 @@ namespace ProductiveTogether
 
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
+            } else
+            {
+                context.Database.Migrate();
             }
-
-            context.Database.Migrate();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -79,6 +83,7 @@ namespace ProductiveTogether
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -6,6 +6,7 @@ using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -13,13 +14,14 @@ using Serilog;
 namespace ProductiveTogether.API.Controllers
 {
 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class GoalsController : ControllerBase
     {
-        private ILogger _logger;
-        private IRepositoryWrapper _repository;
-        private IMapper _mapper;
+        private readonly ILogger _logger;
+        private readonly IRepositoryWrapper _repository;
+        private readonly IMapper _mapper;
 
         public GoalsController(ILogger logger, IRepositoryWrapper repository, IMapper mapper)
         {
@@ -75,7 +77,7 @@ namespace ProductiveTogether.API.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    _logger.Error("Invalid goal object sent from client.");
+                    _logger.Error("Invalid Goal object sent from client.");
                     return BadRequest("Invalid model object");
                 }
 

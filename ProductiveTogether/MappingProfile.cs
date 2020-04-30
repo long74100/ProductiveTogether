@@ -15,6 +15,8 @@ namespace ProductiveTogether.API
             CreateMap<Goal, GoalDto>();
             CreateMap<GoalTask, GoalTaskDto>();
             CreateMap<GoalForCreationDto, Goal>();
+            CreateMap<UserForCreation, User>();
+            CreateMap<UserForLogin, User>();
         }
     }
 }

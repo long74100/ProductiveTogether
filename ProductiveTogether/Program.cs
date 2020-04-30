@@ -22,7 +22,8 @@ namespace ProductiveTogether
             var configuration = new ConfigurationBuilder()
                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                  .AddJsonFile($"appsettings.{environment}.json", optional: true)
-                .Build();
+                 .AddEnvironmentVariables()
+                 .Build();
 
             Log.Logger = new LoggerConfiguration()
                .ReadFrom.Configuration(configuration)
