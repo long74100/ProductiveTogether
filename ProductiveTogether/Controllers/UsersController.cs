@@ -14,14 +14,14 @@ namespace ProductiveTogether.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly ILogger _logger;
         private readonly IRepositoryWrapper _repository;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
-        public UserController(ILogger logger, IRepositoryWrapper repository, UserManager<User> userManager, IMapper mapper)
+        public UsersController(ILogger logger, IRepositoryWrapper repository, UserManager<User> userManager, IMapper mapper)
         {
             _logger = logger;
             _repository = repository;
@@ -33,13 +33,22 @@ namespace ProductiveTogether.API.Controllers
         [HttpGet("{id}", Name = "UserById")]
         public async Task<IActionResult> GetUserById(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            return Ok(User);
+            try
+            {
+                var user = await _userManager.FindByIdAsync(id);
+                return Ok(User);
+            } 
+            catch(Exception ex)
+            {
+                _logger.Error($"Something went wrong inside GetUserById action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+           
         }
 
         // POST: api/User
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] UserForCreation user)
+        public async Task<IActionResult> Post([FromBody] UserForCreationDto user)
         {
             try
             {
@@ -61,7 +70,7 @@ namespace ProductiveTogether.API.Controllers
 
                 if (result.Succeeded)
                 {
-                    var createdUser = _mapper.Map<User>(userEntity);
+                    var createdUser = _mapper.Map<UserDto>(userEntity);
                     return CreatedAtRoute("UserById", new { id = createdUser.Id }, createdUser);
                 } else
                 {

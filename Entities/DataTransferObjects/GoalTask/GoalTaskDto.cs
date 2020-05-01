@@ -7,6 +7,7 @@ namespace Entities.DataTransferObjects
     public class GoalTaskDto
     {
         public Guid Id { get; set; }
+        public Guid GoalId { get; set; }
 
     }
 }

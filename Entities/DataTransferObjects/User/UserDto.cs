@@ -5,12 +5,16 @@ using System.Text;
 
 namespace Entities.DataTransferObjects
 {
-    public class UserForLogin
+    public class UserDto
     {
-        [Required(ErrorMessage = "User Name is required")]
+        public Guid Id { get; set; }
+
         public string Username { get; set; }
 
-        [Required(ErrorMessage = "Password is required")]
-        public string Password { get; set; }
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string EmailAddress { get; set; }
     }
 }

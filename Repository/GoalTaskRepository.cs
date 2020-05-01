@@ -12,5 +12,10 @@ namespace Repository
         public GoalTaskRepository(RepositoryContext repositoryContext) : base(repositoryContext)
         {
         }
+
+        public void CreateGoalTask(GoalTask goalTask)
+        {
+            Create(goalTask);
+        }
     }
 }

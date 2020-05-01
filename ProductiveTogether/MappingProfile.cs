@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Entities.DataTransferObjects;
+using Entities.DataTransferObjects.GoalTask;
 using Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,11 @@ namespace ProductiveTogether.API
         {
             CreateMap<Goal, GoalDto>();
             CreateMap<GoalTask, GoalTaskDto>();
+            CreateMap<GoalTaskForCreationDto, GoalTask>();
             CreateMap<GoalForCreationDto, Goal>();
-            CreateMap<UserForCreation, User>();
-            CreateMap<UserForLogin, User>();
+            CreateMap<User, UserDto>();
+            CreateMap<UserForCreationDto, User>();
+            CreateMap<UserForLoginDto, User>();
         }
     }
 }

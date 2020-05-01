@@ -31,7 +31,7 @@ namespace ProductiveTogether.API.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] UserForLogin model)
+        public async Task<IActionResult> Login([FromBody] UserForLoginDto model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
@@ -43,13 +43,17 @@ namespace ProductiveTogether.API.Controllers
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
-                var secret = _configuration.GetSection("Auth").GetValue<string>("Secret");
+                var secret = _configuration["Auth:Secret"];
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
 
+                var issuer = _configuration["Auth:Issuer"];
+                var audience = _configuration["Auth:Audience"];
+                var durationInMinutes = Convert.ToDouble(_configuration["Auth:Duration"]);
+
                 var token = new JwtSecurityToken(
-                    issuer: "http://dotnetdetail.net",
-                    audience: "http://dotnetdetail.net",
-                    expires: DateTime.Now.AddHours(3),
+                    issuer: issuer,
+                    audience: audience,
+                    expires: DateTime.Now.AddMinutes(durationInMinutes),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );

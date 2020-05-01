@@ -11,6 +11,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
 
 namespace ProductiveTogether.API.Extensions
 {
@@ -23,13 +24,28 @@ namespace ProductiveTogether.API.Extensions
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                var securitySchema = new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
+                    Type = SecuritySchemeType.ApiKey
+                };
+
+                c.AddSecurityDefinition("Bearer", securitySchema);
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        }, new List<string>()
+                    }
                 });
             });
         }
@@ -71,8 +87,11 @@ namespace ProductiveTogether.API.Extensions
         public static void ConfigureJwt(this IServiceCollection services, IConfiguration config)
         {
 
-            var secret = config.GetSection("Auth").GetValue<string>("Secret");
+            var secret = config["Auth:Secret"];
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+
+            var issuer = config["Auth:Issuer"];
+            var audience = config["Auth:Audience"];
 
             services.AddAuthentication(options =>
             {
@@ -88,8 +107,8 @@ namespace ProductiveTogether.API.Extensions
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidAudience = "http://dotnetdetail.net",
-                    ValidIssuer = "http://dotnetdetail.net",
+                    ValidIssuer = issuer,
+                    ValidAudience = audience,
                     IssuerSigningKey = authSigningKey
                 };
             });

@@ -18,10 +18,13 @@ namespace Entities.Models
     {
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "Goal type is required")]
+        [ForeignKey(nameof(User))]
+        public Guid UserId { get; set; }
+
+        [Required]
         public GoalType GoalType { get; set; }
 
-        [Required(ErrorMessage = "Date is required")]
+        [Required]
         public DateTime Date { get; set; }
 
         public ICollection<GoalTask> Tasks { get; set; }
