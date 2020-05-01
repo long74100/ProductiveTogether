@@ -16,6 +16,7 @@ namespace Entities.Models
     [Table("goal")]
     public class Goal
     {
+        [Key]
         public Guid Id { get; set; }
 
         [ForeignKey(nameof(User))]

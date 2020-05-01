@@ -32,55 +32,35 @@ namespace ProductiveTogether.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllGoals()
         {
-            try
-            {
-                var goals = await _repository.Goal.GetAllGoalsAsync();
-                var goalsResult = _mapper.Map<IEnumerable<GoalDto>>(goals);
-                return Ok(goalsResult);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error($"Something went wrong inside GetAllGoals action : {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var goals = await _repository.Goal.GetAllGoalsAsync();
+            var goalsResult = _mapper.Map<IEnumerable<GoalDto>>(goals);
+            throw new Exception("Exception while fetching all the students from the storage.");
+            return Ok(goalsResult);
         }
 
         [HttpGet("{id}", Name = "GoalById")]
         public async Task<IActionResult> GetGoalByIdAsync(Guid id)
         {
-            try
-            {
-                var goal = await _repository.Goal.GetGoalByIdAsync(id);
-                var goalResult = _mapper.Map<GoalDto>(goal);
+           
+            var goal = await _repository.Goal.GetGoalByIdAsync(id);
+            var goalResult = _mapper.Map<GoalDto>(goal);
 
-                return Ok(goalResult);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error($"Something went wrong inside GoalById action : {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return Ok(goalResult);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateGoalAsync([FromBody]GoalForCreationDto goal)
         {
-            try
-            {
-                var goalEntity = _mapper.Map<Goal>(goal);
+           
+            var goalEntity = _mapper.Map<Goal>(goal);
 
-                _repository.Goal.CreateGoal(goalEntity);
-                await _repository.SaveAsync();
+            _repository.Goal.CreateGoal(goalEntity);
+            await _repository.SaveAsync();
 
-                var createdGoal = _mapper.Map<GoalDto>(goalEntity);
+            var createdGoal = _mapper.Map<GoalDto>(goalEntity);
 
-                return CreatedAtRoute("GoalById", new { id = createdGoal.Id }, createdGoal);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error($"Something went wrong inside CreateGoal action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            return CreatedAtRoute("GoalById", new { id = createdGoal.Id }, createdGoal);
+
         }
     }
 }

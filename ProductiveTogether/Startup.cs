@@ -86,6 +86,8 @@ namespace ProductiveTogether
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.ConfigureCustomExceptionMiddleware();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
