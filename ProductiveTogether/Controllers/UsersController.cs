@@ -34,7 +34,15 @@ namespace ProductiveTogether.API.Controllers
         public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            return Ok(User);
+            
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var userResult = _mapper.Map<UserDto>(user);
+
+            return Ok(userResult);
         }
 
         // POST: api/User

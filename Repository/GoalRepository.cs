@@ -23,20 +23,17 @@ namespace Repository
 
         public async Task<IEnumerable<Goal>> GetAllGoalsAsync()
         {
-            return await FindAll().ToListAsync();
+            return await FindAll()
+                .Include(g => g.Tasks)
+                .ToListAsync();
         }
 
         public async Task<Goal> GetGoalByIdAsync(Guid goalId)
         {
             return await FindByCondition(goal => goal.Id.Equals(goalId))
-                .FirstOrDefaultAsync();
-        }
-
-        public async Task<Goal> GetGoalWithTasksAsync(Guid goalId)
-        {
-            return await FindByCondition(goal => goal.Id.Equals(goalId))
                 .Include(g => g.Tasks)
                 .FirstOrDefaultAsync();
         }
+
     }
 }

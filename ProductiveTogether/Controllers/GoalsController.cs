@@ -42,6 +42,12 @@ namespace ProductiveTogether.API.Controllers
         {
 
             var goal = await _repository.Goal.GetGoalByIdAsync(id);
+
+            if (goal == null)
+            {
+                return NotFound();
+            }
+
             var goalResult = _mapper.Map<GoalDto>(goal);
 
             return Ok(goalResult);

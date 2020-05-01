@@ -1,8 +1,7 @@
-﻿using Entities.Models;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Entities.Models;
 
 namespace Contracts
 {
@@ -10,7 +9,6 @@ namespace Contracts
     {
         Task<IEnumerable<Goal>> GetAllGoalsAsync();
         Task<Goal> GetGoalByIdAsync(Guid goalId);
-        Task<Goal> GetGoalWithTasksAsync(Guid goalId);
         void CreateGoal(Goal goal);
     }
 }
