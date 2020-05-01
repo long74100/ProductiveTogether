@@ -34,14 +34,13 @@ namespace ProductiveTogether.API.Controllers
         {
             var goals = await _repository.Goal.GetAllGoalsAsync();
             var goalsResult = _mapper.Map<IEnumerable<GoalDto>>(goals);
-            throw new Exception("Exception while fetching all the students from the storage.");
             return Ok(goalsResult);
         }
 
         [HttpGet("{id}", Name = "GoalById")]
         public async Task<IActionResult> GetGoalByIdAsync(Guid id)
         {
-           
+
             var goal = await _repository.Goal.GetGoalByIdAsync(id);
             var goalResult = _mapper.Map<GoalDto>(goal);
 
@@ -51,7 +50,7 @@ namespace ProductiveTogether.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateGoalAsync([FromBody]GoalForCreationDto goal)
         {
-           
+
             var goalEntity = _mapper.Map<Goal>(goal);
 
             _repository.Goal.CreateGoal(goalEntity);

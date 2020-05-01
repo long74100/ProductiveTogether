@@ -48,34 +48,16 @@ namespace ProductiveTogether.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateGoalTaskAsync([FromBody]GoalTaskForCreationDto goalTask)
         {
-            try
-            {
-                if (goalTask == null)
-                {
-                    _logger.Error("GoalTask object sent from client is null.");
-                    return BadRequest("GoalTask object is null");
-                }
 
-                if (!ModelState.IsValid)
-                {
-                    _logger.Error("Invalid GoalTask object sent from client.");
-                    return BadRequest(ModelState);
-                }
+            var goalTaskEntity = _mapper.Map<GoalTask>(goalTask);
 
-                var goalTaskEntity = _mapper.Map<GoalTask>(goalTask);
+            _repository.GoalTask.CreateGoalTask(goalTaskEntity);
+            await _repository.SaveAsync();
 
-                _repository.GoalTask.CreateGoalTask(goalTaskEntity);
-                await _repository.SaveAsync();
+            var createdGoalTask = _mapper.Map<GoalTaskDto>(goalTaskEntity);
 
-                var createdGoalTask = _mapper.Map<GoalTaskDto>(goalTaskEntity);
+            return CreatedAtRoute("GoalTaskById", new { id = createdGoalTask.Id }, createdGoalTask);
 
-                return CreatedAtRoute("GoalTaskById", new { id = createdGoalTask.Id }, createdGoalTask);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error($"Something went wrong inside CreateGoal action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
         }
 
         // PUT: api/GoalTasks/5

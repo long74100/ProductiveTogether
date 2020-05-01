@@ -33,56 +33,29 @@ namespace ProductiveTogether.API.Controllers
         [HttpGet("{id}", Name = "UserById")]
         public async Task<IActionResult> GetUserById(string id)
         {
-            try
-            {
-                var user = await _userManager.FindByIdAsync(id);
-                return Ok(User);
-            } 
-            catch(Exception ex)
-            {
-                _logger.Error($"Something went wrong inside GetUserById action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-           
+            var user = await _userManager.FindByIdAsync(id);
+            return Ok(User);
         }
 
         // POST: api/User
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] UserForCreationDto user)
         {
-            try
+
+            var userEntity = _mapper.Map<User>(user);
+            var result = await _userManager.CreateAsync(userEntity, user.Password);
+            await _repository.SaveAsync();
+
+            if (result.Succeeded)
             {
-                if (user == null)
-                {
-                    _logger.Error("User object sent from client is null.");
-                    return BadRequest("User object is null");
-                }
-
-                if (!ModelState.IsValid)
-                {
-                    _logger.Error("Invalid User object sent from client.");
-                    return BadRequest("Invalid model object");
-                }
-
-                var userEntity = _mapper.Map<User>(user);
-                var result = await _userManager.CreateAsync(userEntity, user.Password);
-                await _repository.SaveAsync();
-
-                if (result.Succeeded)
-                {
-                    var createdUser = _mapper.Map<UserDto>(userEntity);
-                    return CreatedAtRoute("UserById", new { id = createdUser.Id }, createdUser);
-                } else
-                {
-                    return BadRequest(result);
-                }
-                
+                var createdUser = _mapper.Map<UserDto>(userEntity);
+                return CreatedAtRoute("UserById", new { id = createdUser.Id }, createdUser);
             }
-            catch (Exception ex)
+            else
             {
-                _logger.Error($"Something went wrong inside CreateGoal action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
+                return BadRequest(result);
             }
+
         }
 
         // PUT: api/User/5
