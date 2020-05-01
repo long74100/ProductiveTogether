@@ -7,8 +7,18 @@ namespace Entities.Models
     [Table("goal_task")]
     public class GoalTask
     {
+        public enum GoalTaskStatus
+        {
+            ToDo,
+            InProgress,
+            Complete,
+            Revisit
+        }
+
         [Key]
         public Guid Id { get; set; }
+
+        public GoalTaskStatus status { get; set; }
 
         [ForeignKey(nameof(Goal))]
         public Guid GoalId { get; set; }

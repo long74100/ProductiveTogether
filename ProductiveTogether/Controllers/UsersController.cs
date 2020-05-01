@@ -1,14 +1,11 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Entities.Models;
 using Entities.DataTransferObjects;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Threading.Tasks;
 using AutoMapper;
 using Contracts;
-using System;
 
 namespace ProductiveTogether.API.Controllers
 {

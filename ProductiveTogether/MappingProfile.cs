@@ -13,10 +13,15 @@ namespace ProductiveTogether.API
     {
         public MappingProfile()
         {
+            // Goal
             CreateMap<Goal, GoalDto>();
+            CreateMap<GoalForCreationDto, Goal>();
+
+            // Goal Task
             CreateMap<GoalTask, GoalTaskDto>();
             CreateMap<GoalTaskForCreationDto, GoalTask>();
-            CreateMap<GoalForCreationDto, Goal>();
+
+            // User
             CreateMap<User, UserDto>();
             CreateMap<UserForCreationDto, User>();
             CreateMap<UserForLoginDto, User>();
