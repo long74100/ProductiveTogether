@@ -1,5 +1,6 @@
 
 import React from 'react'
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state: any) => {
@@ -10,7 +11,7 @@ const mapStateToProps = (state: any) => {
 /** Proctects a component from unathenticated users */
 const PrivateComponent = (props: any) => {
   const { component: Component, isLoggedIn, ...rest } = props;
-  return isLoggedIn ? <Component props={rest} /> : null;
+  return isLoggedIn ? <Component props={rest} /> : <Redirect to='/login' />;
 };
 
 export default connect(mapStateToProps)(PrivateComponent);
