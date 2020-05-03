@@ -1,5 +1,8 @@
 ﻿using Entities;
+using Entities.DataTransferObjects;
+using Entities.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.Sqlite;
@@ -79,6 +82,7 @@ namespace ProductiveTogether.API.Tests
                     {
                         appContext.Database.EnsureDeleted();
                         appContext.Database.EnsureCreated();
+                        SeedDb(appContext);
                     }
                     catch (Exception ex)
                     {
@@ -89,6 +93,25 @@ namespace ProductiveTogether.API.Tests
             });
         }
 
+
+        private void SeedDb(RepositoryContext context)
+        {
+            var hasher = new PasswordHasher<User>();
+            User user = new User
+            {
+                Id = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+                UserName = "testuser",
+                FirstName = "first",
+                LastName = "last",
+                NormalizedUserName = "admin",
+                Email = "tester@nonce.fake",
+                NormalizedEmail = "tester@nonce.fake",
+                EmailConfirmed = true,
+                PasswordHash = hasher.HashPassword(null, "Password123@"),
+                SecurityStamp = string.Empty
+            };
+            context.Set<User>().Add(user);
+        }
         /**
         private static DbConnection CreateInMemoryDatabase()
         {
