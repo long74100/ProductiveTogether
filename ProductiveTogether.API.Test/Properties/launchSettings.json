@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "ProductiveTogether.API.Tests": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "Key": "Value",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+        "remoteDebugEnabled": false
+    }
+  }
+}

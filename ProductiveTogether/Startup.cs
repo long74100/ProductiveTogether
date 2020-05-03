@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using ProductiveTogether.API.Extensions;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
 
 namespace ProductiveTogether
 {
@@ -63,7 +64,13 @@ namespace ProductiveTogether
                 context.Database.EnsureCreated();
             } else
             {
-                context.Database.Migrate();
+                try
+                {
+                    context.Database.Migrate();
+                } catch (Exception ex)
+                {
+                    // pass
+                }
             }
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.

@@ -20,7 +20,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Re
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{86BC9040-C2E8-4529-9653-2865833AE7A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "..\Helpers\Helpers.csproj", "{B157CD92-6818-4C60-A48D-BF8E063B5EDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers", "..\Helpers\Helpers.csproj", "{B157CD92-6818-4C60-A48D-BF8E063B5EDB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductiveTogether.API.Tests", "ProductiveTogether.API.Test\ProductiveTogether.API.Tests.csproj", "{993121D0-5A80-4696-89B2-D499AFE96C03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{B157CD92-6818-4C60-A48D-BF8E063B5EDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B157CD92-6818-4C60-A48D-BF8E063B5EDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B157CD92-6818-4C60-A48D-BF8E063B5EDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{993121D0-5A80-4696-89B2-D499AFE96C03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{993121D0-5A80-4696-89B2-D499AFE96C03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{993121D0-5A80-4696-89B2-D499AFE96C03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{993121D0-5A80-4696-89B2-D499AFE96C03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
