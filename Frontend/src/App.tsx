@@ -3,7 +3,7 @@ import logo from './logo.svg';
 
 import { Router, Route, Switch } from 'react-router-dom'
 
-import { LoginPage, PrivateComponent, PrivateRoute, Nav, RegisterPage } from './components';
+import { LoginPage, PrivateComponent, PrivateRoute, Nav, RegisterPage, DailyGoals } from './components';
 import history from './history';
 
 const HomePage = () => {
@@ -32,11 +32,14 @@ const App = () => (
     <Router history={history}>
       <div>
         <PrivateComponent component={Nav} />
-        <Switch>
-          <PrivateComponent exact path="/" component={HomePage} />
-          <Route path='/login' component={LoginPage} />
-          <Route path='/Register' component={RegisterPage} />
-        </Switch>
+        <div className="app-body">
+          <Switch>
+            <PrivateComponent exact path="/" component={HomePage} />
+            <Route path="/dailygoals" component={DailyGoals} />
+            <Route path='/login' component={LoginPage} />
+            <Route path='/Register' component={RegisterPage} />
+          </Switch>
+        </div>
       </div>
     </Router>
   </div>

@@ -38,5 +38,6 @@ namespace Repository
         {
             return await FindByCondition(u => u.UserName.Equals(username)).FirstOrDefaultAsync();
         }
+
     }
 }

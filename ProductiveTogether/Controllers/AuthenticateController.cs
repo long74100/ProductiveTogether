@@ -8,6 +8,7 @@ using Entities.DataTransferObjects;
 using Entities.Models;
 using Helpers.Auth;
 using Contracts;
+using AutoMapper;
 
 namespace ProductiveTogether.API.Controllers
 {
@@ -18,13 +19,15 @@ namespace ProductiveTogether.API.Controllers
         private readonly ILogger _logger;
         private readonly IRepositoryWrapper _repository;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
 
-        public AuthenticateController(ILogger logger, IRepositoryWrapper repository, IConfiguration configuration)
+        public AuthenticateController(ILogger logger, IRepositoryWrapper repository, IConfiguration configuration, IMapper mapper)
         {
             _logger = logger;
             _repository = repository;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -86,6 +89,16 @@ namespace ProductiveTogether.API.Controllers
                 }); 
             }
             return Unauthorized();
+        }
+
+        [HttpGet]
+        [Route("me")]
+        public async Task<IActionResult> Me()
+        {
+            var username = HttpContext.User.Identity.Name;
+            var user = await _repository.User.GetUserByUsernameAsync(username);
+            var userResult = _mapper.Map<User>(user);
+            return Ok(userResult);
         }
     }
 }
