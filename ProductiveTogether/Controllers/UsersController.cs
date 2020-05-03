@@ -6,6 +6,7 @@ using Entities.DataTransferObjects;
 using System.Threading.Tasks;
 using AutoMapper;
 using Contracts;
+using System.Collections.Generic;
 
 namespace ProductiveTogether.API.Controllers
 {
@@ -24,6 +25,14 @@ namespace ProductiveTogether.API.Controllers
             _repository = repository;
             _userManager = userManager;
             _mapper = mapper;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsers()
+        {
+            var users = await _repository.User.GetAllUsersAsync();
+            var usersResult = _mapper.Map<IEnumerable<UserDto>>(users);
+            return Ok(usersResult);
         }
 
         // GET: api/User/5

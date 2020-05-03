@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,12 +12,16 @@ namespace Repository
     public class RepositoryWrapper : IRepositoryWrapper
     {
         private readonly RepositoryContext _repositoryContext;
+        private readonly UserManager<User> _userManager;
         private IGoalRepository _goal;
         private IGoalTaskRepository _goalTask;
+        private IUserRepository _user;
+        private ITokenRepository _token;
 
-        public RepositoryWrapper(RepositoryContext repositoryContext)
+        public RepositoryWrapper(RepositoryContext repositoryContext, UserManager<User> userManager)
         {
             _repositoryContext = repositoryContext;
+            _userManager = userManager;
         }
 
         public IGoalRepository Goal
@@ -44,6 +49,34 @@ namespace Repository
                 return _goalTask;
             }
         }
+
+        public IUserRepository User
+        {
+            get
+            {
+                if (_user == null)
+                {
+                    _user = new UserRepository(_repositoryContext, _userManager);
+                }
+
+                return _user;
+            }
+        }
+
+
+        public ITokenRepository Token
+        {
+            get
+            {
+                if (_token == null)
+                {
+                    _token = new TokenRepository(_repositoryContext);
+                }
+
+                return _token;
+            }
+        }
+
 
         public async Task SaveAsync()
         {

@@ -18,7 +18,7 @@ namespace Entities.Models
         [Key]
         public Guid Id { get; set; }
 
-        public GoalTaskStatus status { get; set; }
+        public GoalTaskStatus Status { get; set; }
 
         [ForeignKey(nameof(Goal))]
         public Guid GoalId { get; set; }

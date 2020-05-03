@@ -1,15 +1,13 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Helpers.Auth;
+using Contracts;
 
 namespace ProductiveTogether.API.Controllers
 {
@@ -18,53 +16,74 @@ namespace ProductiveTogether.API.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly ILogger _logger;
-        private readonly UserManager<User> _userManager;
+        private readonly IRepositoryWrapper _repository;
         private readonly IConfiguration _configuration;
 
 
-        public AuthenticateController(ILogger logger, UserManager<User> userManager, IConfiguration configuration)
+        public AuthenticateController(ILogger logger, IRepositoryWrapper repository, IConfiguration configuration)
         {
             _logger = logger;
-            _userManager = userManager;
+            _repository = repository;
             _configuration = configuration;
         }
+
+        [HttpPost]
+        [Route("refresh")]
+        public async Task<IActionResult> Refresh(string token, string refreshToken)
+        {
+            var principal = AuthHelpers.GetPrincipalFromExpiredToken(token, _configuration);
+            var username = principal.Identity.Name;
+
+            var user = await _repository.User.GetUserByUsernameAsync(username);
+
+            var userRefreshToken = await _repository.Token.GetTokenByIdAsync(refreshToken);
+
+            if (userRefreshToken == null)
+            {
+                throw new SecurityTokenException("Invalid refresh token");
+            }
+
+            var newJwtToken = AuthHelpers.GenerateToken(user, _configuration);
+            var newRefreshToken = AuthHelpers.GenerateRefreshToken();
+
+            // support one refresh token per user for now
+            _repository.Token.DeleteToken(userRefreshToken);
+            await _repository.SaveAsync();
+
+            return Ok(new
+            {
+                token = new JwtSecurityTokenHandler().WriteToken(newJwtToken),
+                refreshToken = newRefreshToken
+            });
+        }
+
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserForLoginDto model)
         {
-            var user = await _userManager.FindByNameAsync(model.Username);
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            var user = await _repository.User.GetUserByUsernameAsync(model.UserName);
+            if (user != null && await _repository.User.CheckPasswordAsync(user, model.Password))
             {
 
-                var authClaims = new[]
+                var token = AuthHelpers.GenerateToken(user, _configuration);
+
+                var refreshToken = new Token
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                    Id = AuthHelpers.GenerateRefreshToken(),
+                    Type = Token.TokenType.Refresh,
+                    UserId = user.Id
                 };
 
-                var secret = _configuration["Auth:Secret"];
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
-
-                var issuer = _configuration["Auth:Issuer"];
-                var audience = _configuration["Auth:Audience"];
-                var durationInMinutes = Convert.ToDouble(_configuration["Auth:Duration"]);
-
-                var token = new JwtSecurityToken(
-                    issuer: issuer,
-                    audience: audience,
-                    expires: DateTime.Now.AddMinutes(durationInMinutes),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                    );
-
-                _logger.Information($"User {user.UserName} has logged in");
+                _repository.Token.CreateToken(refreshToken);
+                await _repository.SaveAsync();
 
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
+                    refreshToken = refreshToken.Id,
                     expiration = token.ValidTo
-                });
+                }); 
             }
             return Unauthorized();
         }

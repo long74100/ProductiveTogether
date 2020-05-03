@@ -9,6 +9,8 @@ namespace Contracts
     {
         IGoalRepository Goal { get; }
         IGoalTaskRepository GoalTask { get; }
+        IUserRepository User { get; }
+        ITokenRepository Token { get;  }
         Task SaveAsync();
     }
 }

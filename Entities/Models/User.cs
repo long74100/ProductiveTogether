@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Entities.Models
@@ -12,7 +13,6 @@ namespace Entities.Models
         [Required]
         public string LastName { get; set; }
 
-        [Required]
-        public string EmailAddress { get; set; }
+        public ICollection<Token> Tokens { get; set; }
     }
 }
