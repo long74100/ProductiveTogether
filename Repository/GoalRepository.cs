@@ -24,7 +24,9 @@ namespace Repository
 
         public async Task<PagedList<Goal>> GetAllGoalsAsync(GoalParameters goalParameters)
         {
-            return await PagedList<Goal>.ToPagedListAsync(FindAll(),
+            var filterDate = goalParameters.Date ?? null;
+            return await PagedList<Goal>.ToPagedListAsync(
+                FindByCondition(g => filterDate != null ? g.Date.Date.Equals(filterDate) : true),
                     goalParameters.Page,
                     goalParameters.PageSize);
         }
