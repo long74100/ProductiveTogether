@@ -5,6 +5,7 @@ import PrivateRoute from './PrivateRoute';
 import Nav from './Nav';
 import RegisterPage from './RegisterPage';
 import ModalManager from './ModalManager';
+import Kanban from './Kanban';
 
 export {
     DailyGoals,
@@ -13,5 +14,6 @@ export {
     PrivateRoute,
     ModalManager,
     Nav,
-    RegisterPage
+    RegisterPage,
+    Kanban
 }

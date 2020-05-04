@@ -4,6 +4,7 @@ import logo from './logo.svg';
 import { Router, Route, Switch } from 'react-router-dom'
 
 import {
+  Kanban,
   LoginPage,
   PrivateComponent,
   PrivateRoute,
@@ -45,6 +46,7 @@ const App = () => (
           <Switch>
             <PrivateComponent exact path="/" component={HomePage} />
             <Route path="/dailygoals" component={DailyGoals} />
+            <Route path='/dailygoal' component={Kanban} />
             <Route path='/login' component={LoginPage} />
             <Route path='/Register' component={RegisterPage} />
           </Switch>
