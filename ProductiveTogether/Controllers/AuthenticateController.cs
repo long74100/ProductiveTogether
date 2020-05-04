@@ -97,7 +97,7 @@ namespace ProductiveTogether.API.Controllers
         {
             var username = HttpContext.User.Identity.Name;
             var user = await _repository.User.GetUserByUsernameAsync(username);
-            var userResult = _mapper.Map<User>(user);
+            var userResult = _mapper.Map<UserDto>(user);
             return Ok(userResult);
         }
     }
