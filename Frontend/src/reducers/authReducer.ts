@@ -7,11 +7,11 @@ loadCurrentUser().then().catch(
     error => removeAccessTokens()
 );
 
-export interface authState {
+export interface AuthState {
     loggedIn: boolean,
 }
 
-const initialState: authState = {
+const initialState: AuthState = {
     loggedIn: sessionStorage.getItem('accessToken') !== null
 }
 
