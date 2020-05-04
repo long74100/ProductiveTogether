@@ -6,28 +6,37 @@ import { Goal } from '../models/Goal';
 import { loadAllDailyGoals } from '../actions/goalActions';
 import { openModal, ModalType } from '../actions/modalActions';
 import GoalCard from './GoalCard';
+import { AppState } from '../reducers/rootReducer';
+
+const mapStateToProps = (state: AppState) => (state.goalReducer);
 
 const mapDispatchToProps = (dispatch: any) => ({
     openModal: (modalType: ModalType, props: any) => dispatch(openModal(modalType, props)),
     loadDailyGoals: () => dispatch(loadAllDailyGoals())
 });
 
-type Props = {
+type DispatchProps = {
     openModal: (modalType: ModalType, props: any) => void,
     loadDailyGoals: () => Promise<Goal[]>
 }
 
+type StateProps = {
+    dailyGoals: { [id: string]: Goal }
+}
+
+type Props = DispatchProps & StateProps;
+
 const DailyGoals = (props: Props) => {
 
     useEffect(() => {
-        props.loadDailyGoals().then(res => console.log(res));
+        props.loadDailyGoals();
     }, []);
 
     const openCreateGoalModal = () => {
         props.openModal(ModalType.CreateGoal, {});
     }
 
-    const goals = [1, 2, 3, 7, 9, 0, 2, 1, 1, 3, 5].map(n =>
+    const goals = Object.entries(props.dailyGoals).map((key, val) =>
         <div className="col-auto mb-3 w-25">
             <GoalCard />
         </div>
@@ -44,4 +53,4 @@ const DailyGoals = (props: Props) => {
     )
 }
 
-export default connect(null, mapDispatchToProps)(DailyGoals);
+export default connect(mapStateToProps, mapDispatchToProps)(DailyGoals);

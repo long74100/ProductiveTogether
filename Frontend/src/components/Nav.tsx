@@ -7,7 +7,7 @@ import { removeAccessTokens } from '../services/authService';
 
 const NavComponent = () => (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Navbar.Brand href="#home">[Productive]</Navbar.Brand>
+        <Navbar.Brand href="/dailygoals">[Productive]</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">

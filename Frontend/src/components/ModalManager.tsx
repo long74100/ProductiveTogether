@@ -6,10 +6,7 @@ import { AppState } from '../reducers/rootReducer';
 import { closeModal, ModalType } from '../actions/modalActions';
 import { Modal } from 'react-bootstrap';
 
-const mapStateToProps = (state: AppState) => {
-    const { isOpen, type, props } = state.modalReducer;
-    return { isOpen, type, props };
-};
+const mapStateToProps = (state: AppState) => (state.modalReducer);
 
 const mapDispatchToProps = (dispatch: any) => ({
     closeModal: () => dispatch(closeModal())
@@ -28,7 +25,6 @@ type DispatchProps = {
 type Props = StateProps & DispatchProps;
 
 const ModalManager = (props: Props) => {
-
     return (
         <ReactModal isOpen={props.isOpen}>
             <Modal.Header>
