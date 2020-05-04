@@ -5,7 +5,7 @@ import LoginPage from './LoginPage';
 import ModalManager from './ModalManager';
 import Nav from './Nav';
 import PrivateComponent from './PrivateComponent'
-import PrivateRoute from './PrivateRoute';
+import PublicComponent from './PublicComponent';
 import RegisterPage from './RegisterPage';
 
 export {
@@ -16,6 +16,6 @@ export {
     ModalManager,
     Nav,
     PrivateComponent,
-    PrivateRoute,
+    PublicComponent,
     RegisterPage,
 }

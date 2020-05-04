@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { default as ReactModal } from 'react-modal';
 
@@ -25,6 +25,10 @@ type DispatchProps = {
 type Props = StateProps & DispatchProps;
 
 const ModalManager = (props: Props) => {
+    useEffect(() => {
+        ReactModal.setAppElement('body');
+    }, []);
+
     return (
         <ReactModal isOpen={props.isOpen}>
             <Modal.Header>

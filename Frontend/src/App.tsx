@@ -8,7 +8,7 @@ import {
   Kanban,
   LoginPage,
   PrivateComponent,
-  PrivateRoute,
+  PublicComponent,
   ModalManager,
   Nav,
   RegisterPage,
@@ -49,8 +49,8 @@ const App = () => (
             <PrivateComponent exact path="/" component={HomePage} />
             <Route path="/dailygoals" component={DailyGoals} />
             <Route path='/dailygoal' component={Kanban} />
-            <Route path='/login' component={LoginPage} />
-            <Route path='/Register' component={RegisterPage} />
+            <PublicComponent path='/login' component={LoginPage} />
+            <PublicComponent path='/Register' component={RegisterPage} />
           </Switch>
         </div>
       </div>
