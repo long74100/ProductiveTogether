@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Contracts;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProductiveTogether.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase

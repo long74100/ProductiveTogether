@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
@@ -7,12 +8,12 @@ import { removeAccessTokens } from '../services/authService';
 
 const NavComponent = () => (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Navbar.Brand href="/dailygoals">[Productive]</Navbar.Brand>
+        <Link className='navbar-brand' to='/dailygoals'>[Productive]</Link>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
-                <Nav.Link href="/dailygoals">Goals</Nav.Link>
-                <Nav.Link href="/dailygoal">Zones</Nav.Link>
+                <Link className='nav-link' to='/dailygoals'>Goals</Link>
+                <Link className='nav-link' to='/dailygoal'>Zone</Link>
             </Nav>
             <Nav>
                 <NavDropdown title={<FontAwesomeIcon icon={faUserCircle} size='2x' style={{ color: 'white' }} />} id="collasible-nav-dropdown">

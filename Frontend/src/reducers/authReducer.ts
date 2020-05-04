@@ -1,18 +1,13 @@
-import { removeAccessTokens } from '../services/authService';
 import { getCurrentUser } from '../services/userService';
 import { LOGIN_SUCCESS, AuthActionTypes } from '../actions/authActions';
 
-/** Removes stale tokens from session storage */
-getCurrentUser().then().catch(
-    error => removeAccessTokens()
-);
 
 export interface AuthState {
     loggedIn: boolean,
 }
 
 const initialState: AuthState = {
-    loggedIn: sessionStorage.getItem('accessToken') !== null,
+    loggedIn: false
 }
 
 export default (state = initialState, action: AuthActionTypes) => {

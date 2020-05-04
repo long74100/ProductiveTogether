@@ -4,6 +4,7 @@ import logo from './logo.svg';
 import { Router, Route, Switch } from 'react-router-dom'
 
 import {
+  Auth,
   Kanban,
   LoginPage,
   PrivateComponent,
@@ -38,6 +39,7 @@ const HomePage = () => {
 
 const App = () => (
   <div className="app">
+    <Auth />
     <Router history={history}>
       <div>
         <PrivateComponent component={Nav} />

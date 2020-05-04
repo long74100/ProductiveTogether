@@ -30,9 +30,11 @@ export const axiosClient = (() => {
             if (!originalRequest._retry && refreshToken) {
                 originalRequest._retry = true;
 
+                const accessToken = sessionStorage.getItem('accessToken');
                 const refreshToken = sessionStorage['refreshToken'];
-                return axios.post(`${defaultOptions.baseURL}/token/refresh/`, {
-                    "refresh": refreshToken
+                return axios.post(`${defaultOptions.baseURL}/Authenticate/refresh`, {
+                    'token': accessToken,
+                    'refreshToken': refreshToken
                 }).then(res => {
                     const accessToken = res.data['access'];
                     sessionStorage.setItem('accessToken', accessToken);
@@ -44,9 +46,11 @@ export const axiosClient = (() => {
                 })
             }
 
-            if (!refreshToken || originalRequest.url.includes('/token/')) {
+            if (!refreshToken || originalRequest.url.includes('/Authenticate/')) {
                 // todo: check on history vs window reload
-                history.push('/login');
+                if (!window.location.href.includes('/login')) {
+                    window.location.reload();
+                }
                 return Promise.reject(error);
             }
         }

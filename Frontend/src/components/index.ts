@@ -1,3 +1,4 @@
+import Auth from './Auth';
 import DailyGoals from './DailyGoals';
 import Kanban from './Kanban';
 import LoginPage from './LoginPage';
@@ -8,6 +9,7 @@ import PrivateRoute from './PrivateRoute';
 import RegisterPage from './RegisterPage';
 
 export {
+    Auth,
     DailyGoals,
     Kanban,
     LoginPage,

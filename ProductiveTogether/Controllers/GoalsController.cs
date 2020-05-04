@@ -14,7 +14,7 @@ using Serilog;
 
 namespace ProductiveTogether.API.Controllers
 {
-
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class GoalsController : ControllerBase

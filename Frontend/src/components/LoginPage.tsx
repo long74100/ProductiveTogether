@@ -3,16 +3,20 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner'
 
+import { User } from '../models/User';
 import { axiosClient as axios } from '../services/axiosClient';
 import { login } from '../actions/authActions';
+import { loadCurrentUser } from '../actions/userActions';
 
 const mapDispatchToProps = (dispatch: any) => ({
     login: (username: string, password: string) => dispatch(login(username, password)),
+    loadCurrentUser: () => dispatch(loadCurrentUser())
 });
 
 type Props = {
     history: any,
-    login: (username: string, password: string) => Promise<string>
+    login: (username: string, password: string) => Promise<string>,
+    loadCurrentUser: () => Promise<User>
 }
 
 type State = {
@@ -55,6 +59,9 @@ class LoginPage extends Component<Props, State> {
                     const token = sessionStorage.getItem('accessToken');
                     axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` };
                     this.props.history.push('/');
+                })
+                .then(res => {
+                    this.props.loadCurrentUser();
                 })
                 .catch(error => {
                     this.setState({ loading: false, error: 'Oops something went wrong!' })

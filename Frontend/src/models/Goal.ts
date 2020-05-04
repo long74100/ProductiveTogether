@@ -9,5 +9,5 @@ export interface Goal {
 export interface GoalTask {
     id: string;
     status: number,
-    goalId: string,
+    goalId: string
 }

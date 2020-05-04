@@ -8,6 +8,8 @@ import { openModal, ModalType } from '../actions/modalActions';
 import GoalCard from './GoalCard';
 import { AppState } from '../reducers/rootReducer';
 
+import { createDailyGoal } from '../services/goalService';
+
 const mapStateToProps = (state: AppState) => (state.goalReducer);
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -30,6 +32,7 @@ const DailyGoals = (props: Props) => {
 
     useEffect(() => {
         props.loadDailyGoals();
+        // createDailyGoal();   
     }, []);
 
     const openCreateGoalModal = () => {

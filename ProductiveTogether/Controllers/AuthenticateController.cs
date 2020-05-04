@@ -9,6 +9,7 @@ using Entities.Models;
 using Helpers.Auth;
 using Contracts;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProductiveTogether.API.Controllers
 {
@@ -32,6 +33,7 @@ namespace ProductiveTogether.API.Controllers
 
         [HttpPost]
         [Route("refresh")]
+        [Authorize]
         public async Task<IActionResult> Refresh(string token, string refreshToken)
         {
             var principal = AuthHelpers.GetPrincipalFromExpiredToken(token, _configuration);
@@ -93,6 +95,7 @@ namespace ProductiveTogether.API.Controllers
 
         [HttpGet]
         [Route("me")]
+        [Authorize]
         public async Task<IActionResult> Me()
         {
             var username = HttpContext.User.Identity.Name;
