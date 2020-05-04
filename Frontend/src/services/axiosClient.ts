@@ -5,6 +5,7 @@ import history from '../history';
 /** Wraps axios to include auth header for requests  */
 export const axiosClient = (() => {
     const defaultOptions = {
+        // In production this would be from env
         baseURL: 'https://localhost:8080/api',
         headers: {
             'Content-Type': 'application/json',
@@ -14,7 +15,7 @@ export const axiosClient = (() => {
 
     const instance = axios.create(defaultOptions);
 
-    // Set the AUTH token for any request
+    // Set auth header for all requests
     instance.interceptors.request.use((config) => {
         const token = sessionStorage.getItem('accessToken');
         config.headers.Authorization = token ? `Bearer ${token}` : '';

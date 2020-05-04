@@ -1,9 +1,9 @@
 import { removeAccessTokens } from '../services/authService';
-import { loadCurrentUser } from '../services/userService';
+import { getCurrentUser } from '../services/userService';
 import { LOGIN_SUCCESS, AuthActionTypes } from '../actions/authActions';
 
 /** Removes stale tokens from session storage */
-loadCurrentUser().then().catch(
+getCurrentUser().then().catch(
     error => removeAccessTokens()
 );
 
