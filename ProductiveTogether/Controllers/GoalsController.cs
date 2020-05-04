@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects;
+using Entities.FilterModels;
 using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -30,11 +31,23 @@ namespace ProductiveTogether.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllGoals()
+        public async Task<IActionResult> GetAllGoals([FromQuery] GoalParameters parameters)
         {
-            var goals = await _repository.Goal.GetAllGoalsAsync();
+            var goals = await _repository.Goal.GetAllGoalsAsync(parameters);
             var goalsResult = _mapper.Map<IEnumerable<GoalDto>>(goals);
-            return Ok(goalsResult);
+
+            var pagedResult = new PagedResult<GoalDto>
+            {
+                Items = goalsResult,
+                TotalCount = goals.TotalCount,
+                PageSize = goals.PageSize,
+                CurrentPage = goals.CurrentPage,
+                TotalPages = goals.TotalPages,
+                HasNext = goals.HasNext,
+                HasPrevious = goals.HasPrevious
+            };
+
+            return Ok(pagedResult);
         }
 
         [HttpGet("{id}", Name = "GoalById")]

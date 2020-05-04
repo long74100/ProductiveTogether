@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Entities.FilterModels;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -21,11 +22,11 @@ namespace Repository
             Create(goal) ;
         }
 
-        public async Task<IEnumerable<Goal>> GetAllGoalsAsync()
+        public async Task<PagedList<Goal>> GetAllGoalsAsync(GoalParameters goalParameters)
         {
-            return await FindAll()
-                .Include(g => g.Tasks)
-                .ToListAsync();
+            return await PagedList<Goal>.ToPagedListAsync(FindAll(),
+                    goalParameters.Page,
+                    goalParameters.PageSize);
         }
 
         public async Task<Goal> GetGoalByIdAsync(Guid goalId)
