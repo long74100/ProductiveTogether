@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { default as ReactModal } from 'react-modal';
 
 import { AppState } from '../reducers/rootReducer';
 import { closeModal, ModalType } from '../actions/modalActions';
 import { Modal } from 'react-bootstrap';
-import { thisExpression } from '@babel/types';
 
 const mapStateToProps = (state: AppState) => {
     const { isOpen, type, props } = state.modalReducer;
@@ -27,7 +26,6 @@ type DispatchProps = {
 }
 
 type Props = StateProps & DispatchProps;
-
 
 const ModalManager = (props: Props) => {
 

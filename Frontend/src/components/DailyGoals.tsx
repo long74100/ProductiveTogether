@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { CardDeck } from 'react-bootstrap';
 
 import { Goal } from '../models/Goal';
-import { getAllGoals } from '../services/goalService';
 import { loadAllDailyGoals } from '../actions/goalActions';
 import { openModal, ModalType } from '../actions/modalActions';
 import GoalCard from './GoalCard';
@@ -13,7 +12,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     loadDailyGoals: () => dispatch(loadAllDailyGoals())
 });
 
-interface Props {
+type Props = {
     openModal: (modalType: ModalType, props: any) => void,
     loadDailyGoals: () => Promise<Goal[]>
 }

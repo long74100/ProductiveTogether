@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner'
@@ -10,12 +10,12 @@ const mapDispatchToProps = (dispatch: any) => ({
     login: (username: string, password: string) => dispatch(login(username, password)),
 });
 
-interface Props {
+type Props = {
     history: any,
     login: (username: string, password: string) => Promise<string>
 }
 
-interface State {
+type State = {
     username: string,
     password: string,
     loading: boolean,

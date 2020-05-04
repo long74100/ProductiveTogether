@@ -11,12 +11,12 @@ const mapDispatchToProps = (dispatch: any) => ({
     login: (username: string, password: string) => dispatch(login(username, password)),
 });
 
-interface Props {
+type Props = {
     history: any,
     login: (username: string, password: string) => Promise<string>
 }
 
-interface State {
+type State = {
     username: string,
     email: string,
     firstName: string,
