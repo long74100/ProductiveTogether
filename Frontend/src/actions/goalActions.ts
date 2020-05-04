@@ -1,6 +1,7 @@
 import { Goal } from '../models/Goal';
 import { getAllGoals } from '../services/goalService';
 import { normalizeData } from '../helper';
+import { PagedResult } from '../models/PagedResults';
 
 export const LOAD_ALL_DAILY_GOALS = 'LOAD_ALL_DAILY_GOALS';
 
@@ -12,16 +13,15 @@ interface LoadAllDailyGoalsAction {
 export type GoalActiontypes = LoadAllDailyGoalsAction
 
 export const loadAllDailyGoals = () => (dispatch: any) => {
-    return getAllGoals().then((dailyGoals: Goal[]) => {
-
-        const normalizedData = normalizeData(dailyGoals);
+    return getAllGoals().then((res: PagedResult<Goal>) => {
+        const normalizedData = normalizeData(res.items);
 
         dispatch({
             type: LOAD_ALL_DAILY_GOALS,
             payload: normalizedData
         })
 
-        return dailyGoals;
+        return res.items;
     })
 
 }
