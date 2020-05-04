@@ -20,7 +20,7 @@ export const register = (
 /**
  * Gets a list of all users
  */
-export const getAllUsers = (): Promise<Array<User>> => {
+export const getAllUsers = (): Promise<User[]> => {
     return axios.get('/users').then(res => res.data);
 }
 

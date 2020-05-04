@@ -3,7 +3,7 @@ export interface Goal {
     userId: string,
     goalType: number,
     dateTime: string
-    goalTasks: Array<GoalTask>
+    goalTasks: GoalTask[]
 }
 
 export interface GoalTask {
