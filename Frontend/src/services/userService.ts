@@ -3,7 +3,7 @@ import { axiosClient as axios } from './axiosClient';
 import { User } from '../models/User';
 
 /** Gets current user, also checks that an access token is still valid by making a request */
-export const getCurrentUser = () => axios.get('/Authenticate/me/');
+export const getCurrentUser = (): Promise<User> => axios.get('/Authenticate/me/').then(res => res.data);
 
 export const register = (
     username: string,

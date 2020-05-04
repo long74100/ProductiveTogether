@@ -12,7 +12,7 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
-    loggedIn: sessionStorage.getItem('accessToken') !== null
+    loggedIn: sessionStorage.getItem('accessToken') !== null,
 }
 
 export default (state = initialState, action: AuthActionTypes) => {

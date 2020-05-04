@@ -11,8 +11,8 @@ export type AuthActionTypes = LoginSuccessAction
 export const login = (username: string, password: string) => (dispatch: any) => {
     return getAccessToken(username, password).then(data => {
         // https://stormpath.com/blog/where-to-store-your-jwts-cookies-vs-html5-web-storage
-        sessionStorage.setItem('accessToken', data.access);
-        sessionStorage.setItem('refreshToken', data.refresh);
+        sessionStorage.setItem('accessToken', data.token);
+        sessionStorage.setItem('refreshToken', data.refreshToken);
         dispatch({
             type: LOGIN_SUCCESS
         });

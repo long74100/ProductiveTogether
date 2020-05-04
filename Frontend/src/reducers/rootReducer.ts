@@ -4,6 +4,7 @@ import { combineReducers } from 'redux';
 import authReducer, { AuthState } from './authReducer';
 import goalReducer, { GoalState } from './goalReducer';
 import modalReducer, { ModalState } from './modalReducer';
+import userReducer, { UserState } from './userReducer';
 
 export interface AppState {
     'authReducer': AuthState,
@@ -14,5 +15,6 @@ export interface AppState {
 export default combineReducers({
     authReducer,
     modalReducer,
-    goalReducer
+    goalReducer,
+    userReducer
 });
