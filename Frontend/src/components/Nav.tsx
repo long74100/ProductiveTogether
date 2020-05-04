@@ -8,11 +8,11 @@ import { removeAccessTokens } from '../services/authService';
 
 const NavComponent = () => (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Link className='navbar-brand' to='/dailygoals'>[Productive]</Link>
+        <Link className='navbar-brand' to='/'>[Productive]</Link>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
-                <Link className='nav-link' to='/dailygoals'>Goals</Link>
+                <Link className='nav-link' to='/mygoals'>My Goals</Link>
                 <Link className='nav-link' to='/dailygoal'>Zone</Link>
             </Nav>
             <Nav>

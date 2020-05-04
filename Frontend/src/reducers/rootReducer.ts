@@ -9,7 +9,8 @@ import userReducer, { UserState } from './userReducer';
 export interface AppState {
     'authReducer': AuthState,
     'modalReducer': ModalState,
-    'goalReducer': GoalState
+    'goalReducer': GoalState,
+    'userReducer': UserState
 }
 
 export default combineReducers({

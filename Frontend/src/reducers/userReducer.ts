@@ -3,12 +3,18 @@ import { GET_CURRENT_USER, UserActionTypes } from '../actions/userActions';
 
 
 export interface UserState {
-    currentUser?: User,
+    currentUser: User,
     users: { [id: string]: User }
 }
 
 const initialState: UserState = {
-    currentUser: undefined,
+    currentUser: {
+        id: '',
+        userName: '',
+        firstName: '',
+        lastName: '',
+        email: ''
+    },
     users: {}
 }
 

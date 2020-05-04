@@ -1,5 +1,5 @@
 import { Goal } from '../models/Goal';
-import { LOAD_ALL_DAILY_GOALS, GoalActiontypes } from '../actions/goalActions';
+import { LOAD_ALL_DAILY_GOALS, CREATE_DAILY_GOAL, GoalActiontypes } from '../actions/goalActions';
 
 
 export interface GoalState {
@@ -17,6 +17,11 @@ export default (state = initialState, action: GoalActiontypes) => {
                 ...state,
                 dailyGoals: { ...state.dailyGoals, ...action.payload }
             };
+        case CREATE_DAILY_GOAL:
+            return {
+                ...state,
+                dailyGoals: { ...state.dailyGoals, ...{ [action.payload.id]: action.payload } }
+            }
         default: return state
     }
 }

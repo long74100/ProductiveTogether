@@ -9,12 +9,12 @@ export const getAllGoals = (): Promise<PagedResult<Goal>> => {
     return axios.get('/goals').then(res => res.data);
 }
 
-export const createDailyGoal = () => {
+export const createDailyGoal = (userId: string) => {
     const userTimezone = moment.tz.guess();
     const date = moment().tz(userTimezone).format('YYYY-MM-DD');
-    axios.post('/goals', {
-        userId: '',
+    return axios.post('/goals', {
+        userId,
         goalType: 0,
         date
-    })
+    }).then(res => res.data);
 }

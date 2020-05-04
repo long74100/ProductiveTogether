@@ -3,27 +3,31 @@ import { connect } from 'react-redux';
 import { CardDeck } from 'react-bootstrap';
 
 import { Goal } from '../models/Goal';
-import { loadAllDailyGoals } from '../actions/goalActions';
+import { User } from '../models/User';
+import { loadAllDailyGoals, createDailyGoalForUser } from '../actions/goalActions';
 import { openModal, ModalType } from '../actions/modalActions';
 import GoalCard from './GoalCard';
 import { AppState } from '../reducers/rootReducer';
 
-import { createDailyGoal } from '../services/goalService';
-
-const mapStateToProps = (state: AppState) => (state.goalReducer);
+const mapStateToProps = (state: AppState) => {
+    return { ...state.goalReducer, currentUser: state.userReducer.currentUser }
+};
 
 const mapDispatchToProps = (dispatch: any) => ({
     openModal: (modalType: ModalType, props: any) => dispatch(openModal(modalType, props)),
-    loadDailyGoals: () => dispatch(loadAllDailyGoals())
+    loadDailyGoals: () => dispatch(loadAllDailyGoals()),
+    createDailyGoal: (userId: string) => dispatch(createDailyGoalForUser(userId))
 });
 
 type DispatchProps = {
     openModal: (modalType: ModalType, props: any) => void,
-    loadDailyGoals: () => Promise<Goal[]>
+    loadDailyGoals: () => Promise<Goal[]>,
+    createDailyGoal: (userId: string) => Promise<Goal>
 }
 
 type StateProps = {
-    dailyGoals: { [id: string]: Goal }
+    dailyGoals: { [id: string]: Goal },
+    currentUser: User
 }
 
 type Props = DispatchProps & StateProps;
@@ -32,11 +36,11 @@ const DailyGoals = (props: Props) => {
 
     useEffect(() => {
         props.loadDailyGoals();
-        // createDailyGoal();   
     }, []);
 
     const openCreateGoalModal = () => {
         props.openModal(ModalType.CreateGoal, {});
+        props.createDailyGoal(props.currentUser.id);
     }
 
     const goals = Object.entries(props.dailyGoals).map((key, val) =>

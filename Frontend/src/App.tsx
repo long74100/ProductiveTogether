@@ -16,27 +16,6 @@ import {
 } from './components';
 import history from './history';
 
-const HomePage = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
-
 const App = () => (
   <div className="app">
     <Auth />
@@ -46,9 +25,8 @@ const App = () => (
         <PrivateComponent component={ModalManager} />
         <div className="app-body">
           <Switch>
-            <PrivateComponent exact path="/" component={HomePage} />
-            <Route path="/dailygoals" component={DailyGoals} />
-            <Route path='/dailygoal' component={Kanban} />
+            <PrivateComponent exact path="/" component={DailyGoals} />
+            <PrivateComponent path='/dailygoal' component={Kanban} />
             <PublicComponent path='/login' component={LoginPage} />
             <PublicComponent path='/Register' component={RegisterPage} />
           </Switch>
