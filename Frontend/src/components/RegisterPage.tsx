@@ -1,19 +1,23 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner'
 
+import { User } from '../models/User';
+import { register } from '../services/userService';
 import { axiosClient as axios } from '../services/axiosClient';
 import { login } from '../actions/authActions';
-import { register } from '../services/userService';
+import { loadCurrentUser } from '../actions/userActions';
 
 const mapDispatchToProps = (dispatch: any) => ({
     login: (username: string, password: string) => dispatch(login(username, password)),
+    loadCurrentUser: () => dispatch(loadCurrentUser())
 });
 
 type Props = {
     history: any,
     login: (username: string, password: string) => Promise<string>
+    loadCurrentUser: () => Promise<User>
 }
 
 type State = {
@@ -73,7 +77,7 @@ class RegisterPage extends Component<Props, State> {
                         .then(res => {
                             const token = sessionStorage.getItem('accessToken');
                             axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` };
-                            this.props.history.push('/');
+                            this.props.loadCurrentUser();
                         }).catch(error => {
                             this.setState({ loading: false, error: 'Oops something went wrong!' })
                         });

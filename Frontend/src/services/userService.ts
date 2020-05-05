@@ -7,13 +7,13 @@ export const getCurrentUser = (): Promise<User> => axios.get('/Authenticate/me/'
 
 export const register = (
     username: string,
-    emailAddress: string,
+    email: string,
     firstName: string,
     lastName: string,
     password: string,
 ): Promise<User> => {
-    return axios.post('/users', {
-        username, emailAddress, firstName, lastName, password
+    return axios.post('/Authenticate/register', {
+        username, email, firstName, lastName, password
     }).then(res => res.data);
 }
 
