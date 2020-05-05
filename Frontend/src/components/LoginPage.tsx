@@ -58,10 +58,10 @@ class LoginPage extends Component<Props, State> {
                 .then(res => {
                     const token = sessionStorage.getItem('accessToken');
                     axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` };
-                    this.props.history.push('/');
                 })
                 .then(res => {
                     this.props.loadCurrentUser();
+                    this.props.history.push('/');
                 })
                 .catch(error => {
                     this.setState({ loading: false, error: 'Oops something went wrong!' })

@@ -11,7 +11,7 @@ const mapStateToProps = (state: any) => {
 /** Proctects a component from authenticated users */
 const PublicComponent = (props: any) => {
     const { component: Component, isLoggedIn, ...rest } = props;
-    return isLoggedIn ? <Redirect to='/' /> : <Component props={rest} />;
+    return isLoggedIn ? <Redirect to='/' /> : <Component {...rest} />;
 };
 
 export default connect(mapStateToProps)(PublicComponent);
