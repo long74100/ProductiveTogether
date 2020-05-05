@@ -1,12 +1,37 @@
-import React, { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import React, { useState } from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+
+import { Goal, GoalTask } from '../models/Goal';
+import { CreatableSingleSelect } from '../components';
 
 // fake data generator
-const getItems = (count: number, offset = 0) =>
-    Array.from({ length: count }, (v, k) => k).map(k => ({
+const getItems = (count: number, offset = 0, colName: string) => {
+    const tasks = Array.from({ length: 3 }, (v, k) => k).map(k => ({
         id: `item-${k + offset}-${new Date().getTime()}`,
-        content: `item ${k + offset}`
+        content: <div>`item ${k + offset}`</div>
     }));
+    // tasks.push({
+    //     id: `add-${colName}`,
+    //     content: <FontAwesomeIcon icon={faPlus} size='2x' />
+    // });
+    return tasks;
+
+    // <button
+    //                                                         type='button'
+    //                                                         onClick={() => {
+    //                                                             const newState = [...state];
+    //                                                             newState[ind].splice(index, 1);
+    //                                                             setState(
+    //                                                                 newState.filter(group => group.length)
+    //                                                             );
+    //                                                         }}
+    //                                                     >
+    //                                                         delete
+    //                         </button>
+}
 
 const reorder = (list: any[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
@@ -36,24 +61,38 @@ const grid = 8;
 
 const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
     // some basic styles to make the items look a bit nicer
-    userSelect: "none",
+    userSelect: 'none',
     padding: grid * 2,
-    margin: `0 0 ${grid}px 0`,
+    margin: `0 1em ${grid}px 1em`,
+    borderRadius: '2.5px',
 
     // change background colour if dragging
-    background: isDragging ? "lightgreen" : "#fff",
+    background: isDragging ? 'lightgreen' : '#fff',
 
     // styles we need to apply on draggables
     ...draggableStyle
 });
 
 const getListStyle = (isDraggingOver: boolean) => ({
-    background: isDraggingOver ? "lightblue" : "#ebecf0",
+    background: isDraggingOver ? 'lightblue' : '#ebecf0',
     padding: grid,
 });
 
-const Kanban = (props: any) => {
-    const [state, setState] = useState([getItems(10), getItems(5, 10)]);
+type Props = {
+    goal: Goal,
+    canEdit: boolean;
+}
+
+const generateColumns = (tasks: GoalTask[]) => {
+
+}
+
+
+const Kanban = (props: Props) => {
+
+    const { goal, canEdit } = props;
+
+    const [state, setState] = useState([getItems(10, 0, 'Todo'), getItems(5, 10, 'In Progress'), getItems(11, 20, 'Complete'), getItems(30, 40, 'Revisit')]);
 
     function onDragEnd(result: any) {
         const { source, destination } = result;
@@ -80,40 +119,49 @@ const Kanban = (props: any) => {
         }
     }
 
+    const backgroundOptions = [
+        { value: 'https://i.pinimg.com/originals/7b/dd/66/7bdd6647425b1e0481a43895577dcecb.jpg', label: 'Chocolate' },
+        { value: 'https://wallpaperaccess.com/full/1098615.jpg', label: 'Boston' }
+    ]
+
+
+    const changeBackground = (url: string) => {
+        const modal = document.querySelector('.ReactModal__Content') as HTMLElement;
+        if (modal) {
+            modal.style.background = `url(${url}) no-repeat center center`;
+            modal.style.backgroundSize = 'cover';
+        }
+    }
+
     return (
         <div>
-            <button
-                type="button"
-                onClick={() => {
-                    setState([...state, []]);
-                }}
-            >
-                Add new group
-            </button>
-            <button
-                type="button"
-                onClick={() => {
-                    setState([...state, getItems(1)]);
-                }}
-            >
-                Add new item
-            </button>
-            <div className='kanban'>
+            <div className='kanban-headers d-flex justify-content-between'>
+                <h1>hello</h1>
+                <div className='select-background w-25'>
+                    <CreatableSingleSelect options={backgroundOptions} handleChange={changeBackground} />
+                </div>
+            </div>
+
+            <div className='kanban mt-3'>
                 <DragDropContext onDragEnd={onDragEnd}>
                     {state.map((el, ind) => (
-                        <Droppable key={ind} droppableId={`${ind}`} isDropDisabled={true}>
+                        <Droppable key={ind} droppableId={`${ind}`} isDropDisabled={!canEdit}>
                             {(provided, snapshot) => (
                                 <div
                                     ref={provided.innerRef}
                                     style={getListStyle(snapshot.isDraggingOver)}
                                     {...provided.droppableProps}
                                 >
+                                    <div className='d-flex justify-content-between' style={{ margin: '0px 1em 8px' }}>
+                                        <p>hello</p>
+                                        <FontAwesomeIcon icon={faPlus} size='2x' color='lightgrey' />
+                                    </div>
                                     {el.map((item, index) => (
                                         <Draggable
                                             key={item.id}
                                             draggableId={item.id}
                                             index={index}
-                                            isDragDisabled={true}
+                                            isDragDisabled={!canEdit}
                                         >
                                             {(provided, snapshot) => (
                                                 <div
@@ -127,24 +175,14 @@ const Kanban = (props: any) => {
                                                 >
                                                     <div className='d-flex'>
                                                         {item.content}
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => {
-                                                                const newState = [...state];
-                                                                newState[ind].splice(index, 1);
-                                                                setState(
-                                                                    newState.filter(group => group.length)
-                                                                );
-                                                            }}
-                                                        >
-                                                            delete
-                            </button>
+
                                                     </div>
                                                 </div>
                                             )}
                                         </Draggable>
                                     ))}
                                     {provided.placeholder}
+
                                 </div>
                             )}
                         </Droppable>

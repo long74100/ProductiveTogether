@@ -34,7 +34,7 @@ const ModalManager = (props: Props) => {
 
     switch (props.type) {
         case ModalType.ViewGoal:
-            modalContent = <Kanban props={props.props} />
+            modalContent = <Kanban {...props.props} />
             break;
         default:
             modalContent = <div>hello bogo</div>
@@ -44,13 +44,13 @@ const ModalManager = (props: Props) => {
     return (
         <ReactModal isOpen={props.isOpen}>
             <Modal.Header>
-                <Modal.Title>Modal title</Modal.Title>
+                <Modal.Title>{props.props.title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {modalContent}
             </Modal.Body>
             <Modal.Footer>
-                <button className='btn btn-default' onClick={props.closeModal}>
+                <button className='btn btn-secondary' onClick={props.closeModal}>
                     Close
                 </button>
                 <button className='btn btn-primary'>

@@ -2,8 +2,12 @@
     display: flex;
     justify-content: space-between;
 
+    .fa-plus:hover {
+        color: #15aabf;
+    }
+
     & > div {
-        border-radius: 1px;
-        width: 33% !important;
+        border-radius: 5px;
+        width: 24% !important;
     }
 }

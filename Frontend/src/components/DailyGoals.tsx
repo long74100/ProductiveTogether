@@ -48,7 +48,7 @@ const DailyGoals = (props: Props) => {
     }
 
     const openViewGoalModal = (goal: Goal) => {
-        props.openModal(ModalType.ViewGoal, goal);
+        props.openModal(ModalType.ViewGoal, { goal, canEdit: true });
     }
 
     const goals = Object.entries(props.dailyGoals).map(([id, goal], index) => {
