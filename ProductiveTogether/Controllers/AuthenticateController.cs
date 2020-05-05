@@ -93,6 +93,28 @@ namespace ProductiveTogether.API.Controllers
             return Unauthorized();
         }
 
+        [HttpPost]
+        [Route("register")]
+        // POST: api/User
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] UserForCreationDto user)
+        {
+
+            var userEntity = _mapper.Map<User>(user);
+            var result = await _repository.User.CreateAsync(userEntity, user.Password);
+            await _repository.SaveAsync();
+
+            if (result.Succeeded)
+            {
+                var createdUser = _mapper.Map<UserDto>(userEntity);
+                return CreatedAtRoute("UserById", new { id = createdUser.Id }, createdUser);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
+
         [HttpGet]
         [Route("me")]
         [Authorize]

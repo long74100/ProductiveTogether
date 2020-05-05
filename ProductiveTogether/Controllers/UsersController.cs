@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Entities.Models;
 using Entities.DataTransferObjects;
@@ -18,14 +17,12 @@ namespace ProductiveTogether.API.Controllers
     {
         private readonly ILogger _logger;
         private readonly IRepositoryWrapper _repository;
-        private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
-        public UsersController(ILogger logger, IRepositoryWrapper repository, UserManager<User> userManager, IMapper mapper)
+        public UsersController(ILogger logger, IRepositoryWrapper repository, IMapper mapper)
         {
             _logger = logger;
             _repository = repository;
-            _userManager = userManager;
             _mapper = mapper;
         }
 
@@ -41,7 +38,7 @@ namespace ProductiveTogether.API.Controllers
         [HttpGet("{id}", Name = "UserById")]
         public async Task<IActionResult> GetUserById(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _repository.User.GetUserByIdAsync(id);
             
             if (user == null)
             {
@@ -59,7 +56,7 @@ namespace ProductiveTogether.API.Controllers
         {
 
             var userEntity = _mapper.Map<User>(user);
-            var result = await _userManager.CreateAsync(userEntity, user.Password);
+            var result = await _repository.User.CreateAsync(userEntity, user.Password);
             await _repository.SaveAsync();
 
             if (result.Succeeded)
@@ -71,7 +68,6 @@ namespace ProductiveTogether.API.Controllers
             {
                 return BadRequest(result);
             }
-
         }
 
         // PUT: api/User/5

@@ -24,12 +24,17 @@ namespace Repository
             return await _userManager.CheckPasswordAsync(user, password);
         }
 
+        public async Task<IdentityResult> CreateAsync(User user, string password)
+        {
+            return await _userManager.CreateAsync(user, password);
+        }
+
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             return await FindAll().ToListAsync();
         }
 
-        public async Task<User> GetUserByIdAsync(Guid id)
+        public async Task<User> GetUserByIdAsync(string id)
         {
             return await FindByCondition(u => u.Id.Equals(id)).FirstOrDefaultAsync();
         }

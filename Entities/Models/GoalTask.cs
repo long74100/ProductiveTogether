@@ -20,6 +20,10 @@ namespace Entities.Models
 
         public GoalTaskStatus Status { get; set; }
 
+        [Required]
+        public string description { get; set; }
+
+
         [ForeignKey(nameof(Goal))]
         public Guid GoalId { get; set; }
         public Goal Goal { get; set; }
