@@ -1,6 +1,7 @@
 export enum ModalType {
     Closed = 'CLOSED',
-    CreateGoal = 'CREATE_GOAL'
+    CreateGoal = 'CREATE_GOAL',
+    ViewGoal = 'VIEW_GOAL'
 }
 
 export const OPEN_MODAL = 'OPEN_MODAL';

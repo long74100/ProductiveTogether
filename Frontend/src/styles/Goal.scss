@@ -1,9 +1,12 @@
+.create-goal-btn {
+    min-width: 10%;
+}
+
 .goal-card { 
     transition: all .2s ease-in-out; 
 }
 .goal-card:hover { 
     transform: scale(1.01); 
-    z-index: 1;
 }
 
 .thumbnail-date {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { CardDeck } from 'react-bootstrap';
 
@@ -8,6 +8,7 @@ import { loadAllDailyGoals, createDailyGoalForUser } from '../actions/goalAction
 import { openModal, ModalType } from '../actions/modalActions';
 import GoalCard from './GoalCard';
 import { AppState } from '../reducers/rootReducer';
+import { CustomButton } from '.';
 
 const mapStateToProps = (state: AppState) => {
     return { ...state.goalReducer, currentUser: state.userReducer.currentUser }
@@ -33,30 +34,37 @@ type StateProps = {
 type Props = DispatchProps & StateProps;
 
 const DailyGoals = (props: Props) => {
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         props.loadDailyGoals();
     }, []);
 
-    const openCreateGoalModal = () => {
-        props.openModal(ModalType.CreateGoal, {});
-        props.createDailyGoal(props.currentUser.id);
+    const createDailyGoal = () => {
+        setLoading(true);
+        props.createDailyGoal(props.currentUser.id)
+            .then(res => setLoading(false))
+            .catch(error => setLoading(false));
+    }
+
+    const openViewGoalModal = (goal: Goal) => {
+        props.openModal(ModalType.ViewGoal, goal);
     }
 
     const goals = Object.entries(props.dailyGoals).map(([id, goal], index) => {
         return (
-            <div className="col-md-3 mb-3" key={id}>
+            <div className='col-md-3 mb-3' key={id} onClick={() => openViewGoalModal(goal)} >
                 <GoalCard goal={goal} />
             </div>
         );
-    }
-    )
+    });
+
     return (
-        <div className="row">
-            <div className="col-12 text-right">
-                <button className="px-3 py-1" onClick={openCreateGoalModal}>Create goal</button>
+        <div className='row'>
+            <div className='col-12 text-right'>
+                <CustomButton className={'create-goal-btn'} loading={loading} text='Create goal' onClick={createDailyGoal} />
             </div>
-            <CardDeck className="mt-3 col-12 row no-gutters">
+            <CardDeck className='mt-3 col-12 row no-gutters'>
                 {goals}
             </CardDeck>
         </div>

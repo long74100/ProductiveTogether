@@ -52,7 +52,7 @@ const getListStyle = (isDraggingOver: boolean) => ({
     padding: grid,
 });
 
-const Kanban = () => {
+const Kanban = (props: any) => {
     const [state, setState] = useState([getItems(10), getItems(5, 10)]);
 
     function onDragEnd(result: any) {
@@ -101,7 +101,7 @@ const Kanban = () => {
             <div className='kanban'>
                 <DragDropContext onDragEnd={onDragEnd}>
                     {state.map((el, ind) => (
-                        <Droppable key={ind} droppableId={`${ind}`}>
+                        <Droppable key={ind} droppableId={`${ind}`} isDropDisabled={true}>
                             {(provided, snapshot) => (
                                 <div
                                     ref={provided.innerRef}
@@ -113,6 +113,7 @@ const Kanban = () => {
                                             key={item.id}
                                             draggableId={item.id}
                                             index={index}
+                                            isDragDisabled={true}
                                         >
                                             {(provided, snapshot) => (
                                                 <div

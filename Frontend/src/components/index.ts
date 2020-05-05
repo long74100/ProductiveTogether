@@ -1,4 +1,5 @@
 import Auth from './Auth';
+import CustomButton from './CustomButton';
 import DailyGoals from './DailyGoals';
 import Footer from './Footer';
 import Kanban from './Kanban';
@@ -12,6 +13,7 @@ import UserProfile from './UserProfile';
 
 export {
     Auth,
+    CustomButton,
     DailyGoals,
     Footer,
     Kanban,
