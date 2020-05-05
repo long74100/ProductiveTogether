@@ -2,11 +2,18 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Entities
 {
     public class RepositoryContext : IdentityDbContext<User>
     {
+        public DbSet<Goal> Goals { get; set; }
+        public DbSet<GoalTask> GoalTasks { get; set; }
+        public DbSet<Token> Tokens { get; set; }
         public RepositoryContext(DbContextOptions<RepositoryContext> options)
             : base(options)
         {
@@ -49,8 +56,33 @@ namespace Entities
             });
         }
 
-        public DbSet<Goal> Goals { get; set; }
-        public DbSet<GoalTask> GoalTasks { get; set; }
-        public DbSet<Token> Tokens { get; set; }
+        public override int SaveChanges()
+        {
+            AddTimestamps();
+            return base.SaveChanges();
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            AddTimestamps();
+            return await base.SaveChangesAsync();
+        }
+
+        private void AddTimestamps()
+        {
+            var entities = ChangeTracker.Entries()
+                .Where(x => x.Entity is TimeStampedEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
+
+            foreach (var entity in entities)
+            {
+                var now = DateTime.UtcNow; // current datetime
+
+                if (entity.State == EntityState.Added)
+                {
+                    ((TimeStampedEntity)entity.Entity).CreatedAt = now;
+                }
+                ((TimeStampedEntity)entity.Entity).UpdatedAt = now;
+            }
+        }
     }
 }

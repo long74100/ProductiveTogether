@@ -2,7 +2,7 @@ export interface Goal {
     id: string,
     userId: string,
     goalType: number,
-    dateTime: string
+    date: string
     goalTasks: GoalTask[]
 }
 

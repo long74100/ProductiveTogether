@@ -1,5 +1,6 @@
-.App {
-  text-align: center;
+.app {
+  min-height: 100vh;
+  position: relative;
 }
 
 .App-header {
@@ -15,4 +16,24 @@
 
 .navbar, .app-body {
   padding: 1em 10%;
+}
+
+.navbar {
+  .dropdown-toggle::after {
+    display: none;
+  }
+
+    
+  .fa-user-circle:hover {
+    color: lightgrey !important; 
+  }
+}
+
+.footer {
+  background: grey;
+  position: absolute;
+  text-align: center;
+  color: #fff;
+  width: 100%;
+  bottom: 0;
 }

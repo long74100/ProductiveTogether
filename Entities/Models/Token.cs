@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Entities.Models
 {
+    [Table("token")]
     public class Token
     {
         public enum TokenType

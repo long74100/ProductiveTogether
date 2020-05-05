@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Entities.Models
 {
     [Table("goal_task")]
-    public class GoalTask
+    public class GoalTask : TimeStampedEntity
     {
         public enum GoalTaskStatus
         {

@@ -1,10 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
 
 import { Router, Route, Switch } from 'react-router-dom'
 
 import {
   Auth,
+  DailyGoals,
+  Footer,
   Kanban,
   LoginPage,
   PrivateComponent,
@@ -12,7 +13,7 @@ import {
   ModalManager,
   Nav,
   RegisterPage,
-  DailyGoals
+  UserProfile
 } from './components';
 import history from './history';
 
@@ -27,12 +28,14 @@ const App = () => (
           <Switch>
             <PrivateComponent exact path="/" component={DailyGoals} />
             <PrivateComponent path='/dailygoal' component={Kanban} />
+            <PrivateComponent path='/profile' component={UserProfile} />
             <PublicComponent path='/login' component={LoginPage} />
             <PublicComponent path='/Register' component={RegisterPage} />
           </Switch>
         </div>
       </div>
     </Router>
+    <Footer />
   </div>
 );
 

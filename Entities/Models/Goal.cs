@@ -14,7 +14,7 @@ namespace Entities.Models
     }
 
     [Table("goal")]
-    public class Goal
+    public class Goal : TimeStampedEntity
     {
         [Key]
         public Guid Id { get; set; }

@@ -43,10 +43,13 @@ const DailyGoals = (props: Props) => {
         props.createDailyGoal(props.currentUser.id);
     }
 
-    const goals = Object.entries(props.dailyGoals).map((key, val) =>
-        <div className="col-auto mb-3 w-25">
-            <GoalCard />
-        </div>
+    const goals = Object.entries(props.dailyGoals).map(([id, goal], index) => {
+        return (
+            <div className="col-md-3 mb-3" key={id}>
+                <GoalCard goal={goal} />
+            </div>
+        );
+    }
     )
     return (
         <div className="row">
