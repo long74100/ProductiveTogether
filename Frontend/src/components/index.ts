@@ -3,7 +3,9 @@ import CustomButton from './CustomButton';
 import CreatableSingleSelect from './CreatableSingleSelect';
 import DailyGoals from './DailyGoals';
 import Footer from './Footer';
+import FocusRooms from './FocusRooms';
 import Kanban from './Kanban';
+import HubConnection from './HubConnection';
 import LoginPage from './LoginPage';
 import ModalManager from './ModalManager';
 import Nav from './Nav';
@@ -18,6 +20,8 @@ export {
     CreatableSingleSelect,
     DailyGoals,
     Footer,
+    FocusRooms,
+    HubConnection,
     Kanban,
     LoginPage,
     ModalManager,

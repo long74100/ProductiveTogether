@@ -26,5 +26,13 @@ services:
     ports:
       - "8080:443"
 
+  signalrtc:
+    image: ${DOCKER_REGISTRY-}signalrtc
+    build:
+      context: .
+      dockerfile: SignalRtc/Dockerfile
+    ports:
+      - "8081:443"
+
 volumes:
     db_data: {}
