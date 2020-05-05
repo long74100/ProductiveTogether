@@ -6,6 +6,8 @@ import {
   Auth,
   DailyGoals,
   Footer,
+  FocusRooms,
+  HubConnection,
   Kanban,
   LoginPage,
   PrivateComponent,
@@ -29,6 +31,8 @@ const App = () => (
             <PrivateComponent exact path="/" component={DailyGoals} />
             <PrivateComponent path='/dailygoal' component={Kanban} />
             <PrivateComponent path='/profile' component={UserProfile} />
+            <PrivateComponent path='/focusrooms' component={FocusRooms} />
+            <PrivateComponent path='/rooms/:id' component={HubConnection} />
             <PublicComponent path='/login' component={LoginPage} />
             <PublicComponent path='/Register' component={RegisterPage} />
           </Switch>

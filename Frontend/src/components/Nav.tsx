@@ -13,7 +13,7 @@ const NavComponent = () => (
         <Navbar.Collapse id='responsive-navbar-nav'>
             <Nav className='mr-auto'>
                 <Link className='nav-link' to='/mygoals'>My Goals</Link>
-                <Link className='nav-link' to='/dailygoal'>Zone</Link>
+                <Link className='nav-link' to='/focusrooms'>Zone</Link>
             </Nav>
             <Nav>
                 <NavDropdown title={<FontAwesomeIcon icon={faUserCircle} size='2x' style={{ color: 'white' }} />} id='collasible-nav-dropdown'>
