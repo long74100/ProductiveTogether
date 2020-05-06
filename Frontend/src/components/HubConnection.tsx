@@ -5,7 +5,6 @@ import * as signalR from "@aspnet/signalr";
 import { User } from '../models/User';
 import { Room } from '../models/Room';
 import { AppState } from '../reducers/rootReducer';
-import { ENGINE_METHOD_DIGESTS } from 'constants';
 
 const mapStateToProps = (state: AppState) => {
     return { currentUser: state.userReducer.currentUser }
@@ -80,9 +79,11 @@ class Hub extends Component<Props, State> {
 
     renderStream(stream: any, connectionId: string) {
         const userName = this.state.peerConnections[connectionId].userName;
+        const videoObject = <video ref={this.state.localVideo} autoPlay width="320" height="240" controls></video>;
+        this.state.localVideo.current.srcObject = stream;
         return (
             <div id={`${connectionId}-video`} key={`${connectionId}-video`} className="video-container">
-                <video autoPlay width="320" height="240" controls></video>
+                {videoObject}
                 {this.makeLabel(userName)}
             </div>
         );
@@ -104,12 +105,14 @@ class Hub extends Component<Props, State> {
 
     checkPeerDisconnect(event: any, peerConnectionId: string) {
         const { peerConnections, peerStreams } = this.state;
-        var state = peerConnections[peerConnectionId].pc.iceConnectionState;
-        if (state === "failed" || state === "closed" || state === "disconnected") {
-            delete peerConnections[peerConnectionId];
-            delete peerStreams[peerConnectionId];
-
-            this.setState({ peerConnections, peerStreams });
+        if (peerConnections[peerConnectionId]) {
+            const state = peerConnections[peerConnectionId].pc.iceConnectionState;
+            if (state === "failed" || state === "closed" || state === "disconnected") {
+                delete peerConnections[peerConnectionId];
+                delete peerStreams[peerConnectionId];
+    
+                this.setState({ peerConnections, peerStreams });
+            }
         }
     }
 
@@ -148,7 +151,7 @@ class Hub extends Component<Props, State> {
             .build();
 
         const constraints = {
-            video: false,
+            video: true,
             audio: true
         };
 
@@ -190,7 +193,7 @@ class Hub extends Component<Props, State> {
                         connection.on('Sdp', (data) => {
                             const { peerConnections, localConnectionId } = this.state;
                             const { connectionId, dest } = data;
-                            if (dest === localConnectionId) {
+                            if (dest === localConnectionId && peerConnections[connectionId]) {
                                 peerConnections[connectionId].pc.setRemoteDescription(new RTCSessionDescription(data.sdp)).then(() => {
                                     // Only create answers in response to offers
                                     if (data.sdp.type == 'offer') {
@@ -207,7 +210,7 @@ class Hub extends Component<Props, State> {
                             const { peerConnections, localConnectionId } = this.state;
                             const { connectionId, dest } = data;
 
-                            if (dest === localConnectionId) {
+                            if (dest === localConnectionId && peerConnections[connectionId]) {
                                 peerConnections[connectionId].pc.addIceCandidate(new RTCIceCandidate(data.ice));
                             }
                         })
