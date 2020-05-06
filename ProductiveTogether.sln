@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductiveTogether.API", "ProductiveTogether\ProductiveTogether.API.csproj", "{BB658A41-67C8-417F-B117-73CB7B337FDA}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B157CD92-6818-4C60-A48D-BF8E063B5EDB} = {B157CD92-6818-4C60-A48D-BF8E063B5EDB}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{037DDD4E-2DE0-490D-9FA1-F52EDD2386B9}"
 EndProject
@@ -20,11 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Re
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{86BC9040-C2E8-4529-9653-2865833AE7A3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers", "..\Helpers\Helpers.csproj", "{B157CD92-6818-4C60-A48D-BF8E063B5EDB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductiveTogether.API.Tests", "ProductiveTogether.API.Test\ProductiveTogether.API.Tests.csproj", "{993121D0-5A80-4696-89B2-D499AFE96C03}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalRtc", "SignalRtc\SignalRtc.csproj", "{2CCD75AB-EBF6-4518-A259-41C01B2693F4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers", "Helpers\Helpers.csproj", "{2393DB74-F361-464F-AA4B-E4F0D517E599}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,10 +49,6 @@ Global
 		{86BC9040-C2E8-4529-9653-2865833AE7A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86BC9040-C2E8-4529-9653-2865833AE7A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86BC9040-C2E8-4529-9653-2865833AE7A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B157CD92-6818-4C60-A48D-BF8E063B5EDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B157CD92-6818-4C60-A48D-BF8E063B5EDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B157CD92-6818-4C60-A48D-BF8E063B5EDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B157CD92-6818-4C60-A48D-BF8E063B5EDB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{993121D0-5A80-4696-89B2-D499AFE96C03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{993121D0-5A80-4696-89B2-D499AFE96C03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{993121D0-5A80-4696-89B2-D499AFE96C03}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -64,6 +57,10 @@ Global
 		{2CCD75AB-EBF6-4518-A259-41C01B2693F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CCD75AB-EBF6-4518-A259-41C01B2693F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CCD75AB-EBF6-4518-A259-41C01B2693F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2393DB74-F361-464F-AA4B-E4F0D517E599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2393DB74-F361-464F-AA4B-E4F0D517E599}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2393DB74-F361-464F-AA4B-E4F0D517E599}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2393DB74-F361-464F-AA4B-E4F0D517E599}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
