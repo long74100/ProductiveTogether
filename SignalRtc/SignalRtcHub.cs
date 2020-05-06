@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SignalRtc
@@ -14,19 +15,58 @@ namespace SignalRtc
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
 
-            await Clients.Group(groupName).SendAsync("AddToGroup", $"{userName} - {Context.ConnectionId} has joined the group {groupName}.");
+            var data = new
+            {
+                connectionId = Context.ConnectionId,
+                userName
+            };
+
+            await Clients.Group(groupName).SendAsync("AddToGroup", data);
         }
 
-        public async Task RemoveFromGroup(string userName, string groupName)
+        public async Task RemoveFromGroup(string groupName)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
 
-            await Clients.Group(groupName).SendAsync("RemoveFromGroup", $"{userName} - {Context.ConnectionId} has left the group {groupName}.");
+            var data = new
+            {
+                connectionId = Context.ConnectionId
+            };
+
+            await Clients.Group(groupName).SendAsync("RemoveFromGroup", data);
         }
 
-        public async Task SendSignalToGroup(string signal, string userName, string groupName)
+        public async Task SendSignal(string userName, string dest, string groupName)
         {
-            await Clients.Group(groupName).SendAsync("SendSignalToGroup", Context.ConnectionId, signal);
+            var data = new
+            {
+                connectionId = Context.ConnectionId,
+                userName,
+                dest
+            };
+            await Clients.Group(groupName).SendAsync("SendSignal", data);
+        }
+
+        public async Task Ice(object ice, string dest, string groupName)
+        {
+            var data = new
+            {
+                ice,
+                connectionId = Context.ConnectionId,
+                dest
+            };
+            await Clients.Group(groupName).SendAsync("Ice", data);
+        }
+
+        public async Task Sdp(object sdp, string dest, string groupName)
+        {
+            var data = new
+            {
+                sdp,
+                connectionId = Context.ConnectionId,
+                dest
+            };
+            await Clients.Group(groupName).SendAsync("Sdp", data);
         }
     }
 }

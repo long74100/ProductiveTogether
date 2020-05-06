@@ -5,10 +5,22 @@ import * as signalR from "@aspnet/signalr";
 import { User } from '../models/User';
 import { Room } from '../models/Room';
 import { AppState } from '../reducers/rootReducer';
+import { ENGINE_METHOD_DIGESTS } from 'constants';
 
 const mapStateToProps = (state: AppState) => {
     return { currentUser: state.userReducer.currentUser }
 };
+
+type State = {
+    connection?: signalR.HubConnection,
+    roomId: string,
+    userName: string,
+    localVideo: any,
+    localStream: any,
+    localConnectionId: string,
+    peerStreams: any,
+    peerConnections: any
+}
 
 type Props = {
     currentUser: User,
@@ -26,47 +38,211 @@ const rooms: Room[] = [{
     ownerId: 'z'
 }]
 
-class Hub extends Component<Props> {
+class Hub extends Component<Props, State> {
+    peerConnectionConfig = {
+        'iceServers': [
+            { 'urls': 'stun:stun.stunprotocol.org:3478' },
+            { 'urls': 'stun:stun.l.google.com:19302' },
+        ]
+    }
+
+    hubUrl = 'https://localhost:8081/signalrtc';
+
     constructor(props: any) {
         super(props);
 
         this.state = {
-            connection: null
+            connection: undefined,
+            roomId: this.props.computedMatch.params.id,
+            userName: this.props.currentUser.userName,
+            localStream: null,
+            localVideo: React.createRef(),
+            localConnectionId: '',
+            peerStreams: {},
+            peerConnections: {}
         }
-        console.log(props);
     }
 
-    async componentDidMount() {
+    makeLabel = (label: string) => {
+        return (
+            <div className='video-label'>
+                {label}
+            </div>
+        )
+    }
+
+    gotIceCandidate(event: any, connectionId: string) {
+        const { connection, localConnectionId, roomId } = this.state;
+        if (connection && event.candidate != null) {
+            connection.invoke('Ice', event.candidate, connectionId, roomId)
+        }
+    }
+
+    renderStream(stream: any, connectionId: string) {
+        const userName = this.state.peerConnections[connectionId].userName;
+        return (
+            <div id={`${connectionId}-video`} key={`${connectionId}-video`} className="video-container">
+                <video autoPlay width="320" height="240" controls></video>
+                {this.makeLabel(userName)}
+            </div>
+        );
+    }
+
+    gotRemoteStream(event: any, connectionId: string) {
+        this.setState({ peerStreams: { ...this.state.peerStreams, [connectionId]: event.streams[0] } })
+    }
+
+    createdDescription = (description: any, peerConnectionId: string) => {
+        const { connection, peerConnections, roomId } = this.state;
+
+        peerConnections[peerConnectionId].pc.setLocalDescription(description).then(() => {
+            if (connection) {
+                connection.invoke('Sdp', description, peerConnectionId, roomId);
+            }
+        });
+    }
+
+    checkPeerDisconnect(event: any, peerConnectionId: string) {
+        const { peerConnections, peerStreams } = this.state;
+        var state = peerConnections[peerConnectionId].pc.iceConnectionState;
+        if (state === "failed" || state === "closed" || state === "disconnected") {
+            delete peerConnections[peerConnectionId];
+            delete peerStreams[peerConnectionId];
+
+            this.setState({ peerConnections, peerStreams });
+        }
+    }
+
+
+    setUpPeerConnection = (connectionId: string, username: string, initCall: boolean = false) => {
+        const { peerConnections, localStream } = this.state;
+
+        const peerConnection = new RTCPeerConnection(this.peerConnectionConfig);
+        peerConnection.onicecandidate = ev => this.gotIceCandidate(ev, connectionId);
+        // @ts-ignore
+        peerConnection.ontrack = ev => this.gotRemoteStream(ev, connectionId);
+        peerConnection.oniceconnectionstatechange = ev => this.checkPeerDisconnect(ev, connectionId);
+        // @ts-ignore
+        peerConnection.addStream(localStream);
+
+        if (initCall) {
+            peerConnection.createOffer().then(description => this.createdDescription(description, connectionId));
+        }
+
+        const connection = {
+            userName: username,
+            connectionId: connectionId,
+            pc: peerConnection
+        }
+
+        peerConnections[connectionId] = connection;
+        this.setState({ peerConnections });
+    }
+
+
+    componentDidMount() {
+        const { userName, roomId, localVideo } = this.state;
+
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl('https://localhost:8081/signalrtc')
+            .withUrl(this.hubUrl)
             .build();
 
-        await connection.start();
+        const constraints = {
+            video: false,
+            audio: true
+        };
 
-        connection.on('AddToGroup', (data) => {
-            console.log("hello")
-            console.log(data);
-        })
+        if (navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(localStream => {
+                    this.setState({ localStream });
+                    localVideo.current.srcObject = localStream;
+                })
 
-        connection.on('RemoveFromGroup', (data) => {
-            console.log(data);
-        })
+                // set up websocket and message all existing clients
+                .then(() => {
+                    connection.start().then(res => {
+                        connection.on('AddToGroup', (data) => {
+                            if (data.userName !== userName) {
+                                const { localConnectionId, roomId, userName } = this.state;
+                                this.setUpPeerConnection(data.connectionId, data.userName);
+                                connection.invoke('SendSignal', userName, data.connectionId, roomId);
+                            } else {
+                                this.setState({ localConnectionId: data.connectionId });
+                            }
+                        });
 
-        connection.on('SendSignalToGroup', (data) => {
-            console.log(data);
-        })
+                        connection.on('RemoveFromGroup', (data) => {
+                            const { peerConnections, peerStreams } = this.state;
+                            delete peerConnections[data.connectionId];
+                            delete peerStreams[data.connectionId];
+                            this.setState({ peerConnections, peerStreams });
+                        });
 
-        const roomId = this.props.computedMatch.params.id;
-        const userName = this.props.currentUser.userName;
-        connection.invoke('AddToGroup', userName, roomId);
 
-        this.setState({ connection });
+                        connection.on('SendSignal', (data) => {
+                            const { localConnectionId } = this.state;
+                            if (data.dest === localConnectionId) {
+                                this.setUpPeerConnection(data.connectionId, data.userName, true);
+                            }
+                        });
 
+                        connection.on('Sdp', (data) => {
+                            const { peerConnections, localConnectionId } = this.state;
+                            const { connectionId, dest } = data;
+                            if (dest === localConnectionId) {
+                                peerConnections[connectionId].pc.setRemoteDescription(new RTCSessionDescription(data.sdp)).then(() => {
+                                    // Only create answers in response to offers
+                                    if (data.sdp.type == 'offer') {
+                                        peerConnections[connectionId].pc.createAnswer().then((description: any) => {
+                                            this.createdDescription(description, connectionId)
+                                        })
+                                    }
+                                });
+                            }
+
+                        });
+
+                        connection.on('Ice', (data) => {
+                            const { peerConnections, localConnectionId } = this.state;
+                            const { connectionId, dest } = data;
+
+                            if (dest === localConnectionId) {
+                                peerConnections[connectionId].pc.addIceCandidate(new RTCIceCandidate(data.ice));
+                            }
+                        })
+
+                        connection.invoke('AddToGroup', this.state.userName, roomId);
+
+                        this.setState({ connection });
+
+                    });
+                });
+
+        } else {
+            alert('Your browser does not support getUserMedia API');
+        }
+    }
+
+    componentWillUnmount() {
+        const { roomId, connection } = this.state;
+        if (connection) {
+            connection.invoke('RemoveFromGroup', roomId);
+        }
     }
 
     render() {
+        const { userName, peerStreams } = this.state;
+        const streams = Object.entries(peerStreams).map(([connectionId, stream], index) => this.renderStream(stream, connectionId));
+        console.log(streams);
         return (
-            <></>
+            <div id="videos" className="videos">
+                <div id="local-video-container" className="video-container">
+                    <video ref={this.state.localVideo} id="local-video" autoPlay width="320" height="240" controls></video>
+                    {this.makeLabel(userName)}
+                </div>
+                {streams}
+            </div>
         );
     }
 }
