@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import Spinner from 'react-bootstrap/Spinner'
 
 type Props = {
     loading: boolean,
     text: string,
-    onClick?: any,
+    onClick: (event: MouseEvent<HTMLButtonElement>) => void;
     loadingText?: string,
     className?: string,
 }

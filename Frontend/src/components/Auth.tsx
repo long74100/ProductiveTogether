@@ -1,26 +1,18 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { User } from '../models/User';
 import { loadCurrentUser } from '../actions/userActions';
-
-const mapDispatchToProps = (dispatch: any) => ({
-    loadCurrentUser: () => dispatch(loadCurrentUser())
-});
-
-type Props = {
-    loadCurrentUser: () => Promise<User>
-}
 
 /**
  * Keeping the user logged in 
  */
-const Auth = (props: Props) => {
+const Auth = () => {
+    const dispatch = useDispatch();
     useEffect(() => {
-        props.loadCurrentUser();
+        dispatch(loadCurrentUser());
     }, []);
 
-    return (<></>)
+    return <></>;
 }
 
-export default connect(null, mapDispatchToProps)(Auth);
+export default Auth;

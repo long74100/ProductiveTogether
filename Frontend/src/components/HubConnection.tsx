@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import * as signalR from "@aspnet/signalr";
 
 import { User } from '../models/User';
-import { Room } from '../models/Room';
 import { AppState } from '../reducers/rootReducer';
-import { ENGINE_METHOD_DIGESTS } from 'constants';
 
 const mapStateToProps = (state: AppState) => {
     return { currentUser: state.userReducer.currentUser }
@@ -26,17 +24,6 @@ type Props = {
     currentUser: User,
     computedMatch: any
 }
-
-const rooms: Room[] = [{
-    id: 'x-1',
-    ownerId: 'x'
-}, {
-    id: 'x-2',
-    ownerId: 'y'
-}, {
-    id: 'x-3',
-    ownerId: 'z'
-}]
 
 class Hub extends Component<Props, State> {
     peerConnectionConfig = {
@@ -157,6 +144,7 @@ class Hub extends Component<Props, State> {
                 .then(localStream => {
                     this.setState({ localStream });
                     localVideo.current.srcObject = localStream;
+                    console.log(localVideo);
                 })
 
                 // set up websocket and message all existing clients
@@ -228,6 +216,7 @@ class Hub extends Component<Props, State> {
         const { roomId, connection } = this.state;
         if (connection) {
             connection.invoke('RemoveFromGroup', roomId);
+            this.state.localStream.getTracks().forEach((track: any) => { track.stop(); });
         }
     }
 

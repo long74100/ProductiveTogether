@@ -11,7 +11,10 @@ import { AppState } from '../reducers/rootReducer';
 import { CustomButton } from '.';
 
 const mapStateToProps = (state: AppState) => {
-    return { ...state.goalReducer, currentUser: state.userReducer.currentUser }
+    return {
+        ...state.goalReducer,
+        currentUser: state.userReducer.currentUser
+    }
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -48,7 +51,7 @@ const DailyGoals = (props: Props) => {
     }
 
     const openViewGoalModal = (goal: Goal) => {
-        props.openModal(ModalType.ViewGoal, { goal, canEdit: true });
+        props.openModal(ModalType.ViewGoal, { goal, canEdit: goal.userId === props.currentUser.id });
     }
 
     const goals = Object.entries(props.dailyGoals).map(([id, goal], index) => {

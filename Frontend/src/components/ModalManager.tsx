@@ -37,12 +37,11 @@ const ModalManager = (props: Props) => {
             modalContent = <Kanban {...props.props} />
             break;
         default:
-            modalContent = <div>hello bogo</div>
+            modalContent = <div>hello modal</div>
     }
 
-
     return (
-        <ReactModal isOpen={props.isOpen}>
+        <ReactModal isOpen={props.isOpen} onRequestClose={props.closeModal}>
             <Modal.Header>
                 <Modal.Title>{props.props.title}</Modal.Title>
             </Modal.Header>
