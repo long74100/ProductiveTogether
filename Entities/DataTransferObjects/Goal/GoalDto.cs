@@ -15,6 +15,6 @@ namespace Entities.DataTransferObjects
 
         public DateTime Date { get; set; }
 
-        public ICollection<ActionItemDto> Tasks { get; set; }
+        public ICollection<ActionItemDto> ActionItems { get; set; }
     }
 }

@@ -9,5 +9,13 @@ export interface Goal {
 export interface ActionItem {
     id: string;
     status: number,
-    goalId: string
+    goalId: string,
+    description: string
+}
+
+export const ActionItemStatus = {
+    Todo: 0,
+    InProgress: 1,
+    Complete: 2,
+    Revisit: 3
 }

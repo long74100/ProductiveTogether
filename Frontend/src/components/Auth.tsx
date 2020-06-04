@@ -10,7 +10,7 @@ const Auth = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(loadCurrentUser());
-    });
+    }, []);
 
     return <></>;
 }

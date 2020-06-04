@@ -41,7 +41,7 @@ const DailyGoals = (props: Props) => {
 
     useEffect(() => {
         props.loadDailyGoals();
-    });
+    }, []);
 
     const createDailyGoal = () => {
         setLoading(true);
