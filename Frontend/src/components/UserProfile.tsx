@@ -1,9 +1,5 @@
 import React from 'react';
 
-const up = {
-
-}
-
 export const UserProfile = () => {
     return (
         <div>

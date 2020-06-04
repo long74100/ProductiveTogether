@@ -59,7 +59,7 @@ class Hub extends Component<Props, State> {
     }
 
     gotIceCandidate(event: any, connectionId: string) {
-        const { connection, localConnectionId, roomId } = this.state;
+        const { connection, roomId } = this.state;
         if (connection && event.candidate != null) {
             connection.invoke('Ice', event.candidate, connectionId, roomId)
         }
@@ -152,7 +152,7 @@ class Hub extends Component<Props, State> {
                     connection.start().then(res => {
                         connection.on('AddToGroup', (data) => {
                             if (data.userName !== userName) {
-                                const { localConnectionId, roomId, userName } = this.state;
+                                const { roomId, userName } = this.state;
                                 this.setUpPeerConnection(data.connectionId, data.userName);
                                 connection.invoke('SendSignal', userName, data.connectionId, roomId);
                             } else {
@@ -181,7 +181,7 @@ class Hub extends Component<Props, State> {
                             if (dest === localConnectionId) {
                                 peerConnections[connectionId].pc.setRemoteDescription(new RTCSessionDescription(data.sdp)).then(() => {
                                     // Only create answers in response to offers
-                                    if (data.sdp.type == 'offer') {
+                                    if (data.sdp.type === 'offer') {
                                         peerConnections[connectionId].pc.createAnswer().then((description: any) => {
                                             this.createdDescription(description, connectionId)
                                         })

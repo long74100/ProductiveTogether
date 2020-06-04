@@ -1,4 +1,3 @@
-import { getCurrentUser } from '../services/userService';
 import { LOGIN_SUCCESS, AuthActionTypes } from '../actions/authActions';
 
 

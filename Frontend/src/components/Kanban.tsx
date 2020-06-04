@@ -70,6 +70,7 @@ type Props = {
 const Kanban = (props: Props) => {
 
     const { goal, canEdit } = props;
+    console.log(goal);
     const columns = {
         'Todo': getItems(10, 0, 'Todo'),
         'In Progress': getItems(5, 10, 'In Progress'),

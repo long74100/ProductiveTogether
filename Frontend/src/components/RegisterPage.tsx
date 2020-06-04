@@ -63,7 +63,7 @@ class RegisterPage extends Component<Props, State> {
         const { username, email, firstName, lastName, password, confirmPassword } = this.state;
 
         if (username && email && firstName && lastName && password && confirmPassword) {
-            if (password != confirmPassword) {
+            if (password !== confirmPassword) {
                 this.setState({
                     error: 'Passwords do not match'
                 })

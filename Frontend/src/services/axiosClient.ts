@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-import history from '../history';
-
 /** Wraps axios to include auth header for requests  */
 export const axiosClient = (() => {
     const defaultOptions = {
