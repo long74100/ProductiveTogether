@@ -33,7 +33,7 @@ class Hub extends Component<Props, State> {
         ]
     }
 
-    hubUrl = 'https://localhost:8081/signalrtc';
+    hubUrl = 'https://localhost:8081/hub';
 
     constructor(props: any) {
         super(props);
@@ -129,9 +129,9 @@ class Hub extends Component<Props, State> {
 
     componentDidMount() {
         const { userName, roomId, localVideo } = this.state;
-
+        const accessToken = sessionStorage.getItem('accessToken') || '';
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl(this.hubUrl)
+            .withUrl(this.hubUrl, { accessTokenFactory: () => accessToken })
             .build();
 
         const constraints = {

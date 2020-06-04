@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 
 namespace SignalRtc
 {
+    [Authorize]
     public class SignalRtcHub : Hub
     {
         public async Task AddToGroup(string userName, string groupName)
