@@ -3,10 +3,10 @@ export interface Goal {
     userId: string,
     goalType: number,
     date: string
-    goalTasks: GoalTask[]
+    actionItems: ActionItem[]
 }
 
-export interface GoalTask {
+export interface ActionItem {
     id: string;
     status: number,
     goalId: string

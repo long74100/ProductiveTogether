@@ -30,6 +30,6 @@ namespace Entities.Models
         [Required]
         public DateTime Date { get; set; }
 
-        public ICollection<GoalTask> Tasks { get; set; }
+        public ICollection<ActionItem> Tasks { get; set; }
     }
 }

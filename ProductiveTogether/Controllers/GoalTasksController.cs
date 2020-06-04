@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects;
-using Entities.DataTransferObjects.GoalTask;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,14 +14,14 @@ namespace ProductiveTogether.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GoalTasksController : ControllerBase
+    public class ActionItemsController : ControllerBase
     {
 
         private readonly ILogger _logger;
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
 
-        public GoalTasksController(ILogger logger, IRepositoryWrapper repository, IMapper mapper)
+        public ActionItemsController(ILogger logger, IRepositoryWrapper repository, IMapper mapper)
         {
             _logger = logger;
             _repository = repository;
@@ -30,43 +29,38 @@ namespace ProductiveTogether.API.Controllers
         }
 
 
-        // GET: api/GoalTasks
         [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/GoalTasks/5
-        [HttpGet("{id}", Name = "GoalTaskById")]
+        [HttpGet("{id}", Name = "ActionItemById")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST: api/GoalTasks
         [HttpPost]
-        public async Task<IActionResult> CreateGoalTaskAsync([FromBody]GoalTaskForCreationDto goalTask)
+        public async Task<IActionResult> CreateActionItemAsync([FromBody]ActionItemForCreationDto actionItem)
         {
 
-            var goalTaskEntity = _mapper.Map<GoalTask>(goalTask);
+            var actionItemEntity = _mapper.Map<ActionItem>(actionItem);
 
-            _repository.GoalTask.CreateGoalTask(goalTaskEntity);
+            _repository.ActionItem.CreateActionItem(actionItemEntity);
             await _repository.SaveAsync();
 
-            var createdGoalTask = _mapper.Map<GoalTaskDto>(goalTaskEntity);
+            var createdActionItem = _mapper.Map<ActionItemDto>(actionItemEntity);
 
-            return CreatedAtRoute("GoalTaskById", new { id = createdGoalTask.Id }, createdGoalTask);
+            return CreatedAtRoute("ActionItemById", new { id = createdActionItem.Id }, createdActionItem);
 
         }
 
-        // PUT: api/GoalTasks/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using static Entities.Models.GoalTask;
+using static Entities.Models.ActionItem;
 
 namespace Entities.DataTransferObjects
 {
-    public class GoalTaskDto
+    public class ActionItemDto
     {
         public Guid Id { get; set; }
         public Guid GoalId { get; set; }
-        public GoalTaskStatus Status { get; set; }
-        public string description { get; set; }
+        public ActionItemStatus Status { get; set; }
+        public string Description { get; set; }
     }
 }

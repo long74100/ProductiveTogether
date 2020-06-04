@@ -4,33 +4,17 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
-import { Goal, GoalTask } from '../models/Goal';
+import { Goal, ActionItem } from '../models/Goal';
 import { CreatableSingleSelect } from '../components';
 
 // fake data generator
 const getItems = (count: number, offset = 0, colName: string) => {
-    const tasks = Array.from({ length: 3 }, (v, k) => k).map(k => ({
+    const tasks = Array.from({ length: 1 }, (v, k) => k).map(k => ({
         id: `item-${k + offset}-${new Date().getTime()}`,
         content: <div>`item ${k + offset}`</div>
     }));
-    // tasks.push({
-    //     id: `add-${colName}`,
-    //     content: <FontAwesomeIcon icon={faPlus} size='2x' />
-    // });
-    return tasks;
 
-    // <button
-    //                                                         type='button'
-    //                                                         onClick={() => {
-    //                                                             const newState = [...state];
-    //                                                             newState[ind].splice(index, 1);
-    //                                                             setState(
-    //                                                                 newState.filter(group => group.length)
-    //                                                             );
-    //                                                         }}
-    //                                                     >
-    //                                                         delete
-    //                         </button>
+    return tasks;
 }
 
 const reorder = (list: any[], startIndex: number, endIndex: number) => {
@@ -83,16 +67,17 @@ type Props = {
     canEdit: boolean;
 }
 
-const generateColumns = (tasks: GoalTask[]) => {
-
-}
-
-
 const Kanban = (props: Props) => {
 
     const { goal, canEdit } = props;
+    const columns = {
+        'Todo': getItems(10, 0, 'Todo'),
+        'In Progress': getItems(5, 10, 'In Progress'),
+        'Complete': getItems(11, 20, 'Complete'),
+        'Revisit': getItems(30, 40, 'Revisit')
+    };
 
-    const [state, setState] = useState([getItems(10, 0, 'Todo'), getItems(5, 10, 'In Progress'), getItems(11, 20, 'Complete'), getItems(30, 40, 'Revisit')]);
+    const [tasks, setTasks] = useState([getItems(10, 0, 'Todo'), getItems(5, 10, 'In Progress'), getItems(11, 20, 'Complete'), getItems(30, 40, 'Revisit')]);
 
     function onDragEnd(result: any) {
         const { source, destination } = result;
@@ -105,17 +90,17 @@ const Kanban = (props: Props) => {
         const dInd = +destination.droppableId;
 
         if (sInd === dInd) {
-            const items = reorder(state[sInd], source.index, destination.index);
-            const newState = [...state];
+            const items = reorder(tasks[sInd], source.index, destination.index);
+            const newState = [...tasks];
             newState[sInd] = items;
-            setState(newState);
+            setTasks(newState);
         } else {
-            const result = move(state[sInd], state[dInd], source, destination);
-            const newState = [...state];
+            const result = move(tasks[sInd], tasks[dInd], source, destination);
+            const newState = [...tasks];
             newState[sInd] = result[sInd];
             newState[dInd] = result[dInd];
 
-            setState(newState.filter(group => group.length));
+            setTasks(newState.filter(group => group.length));
         }
     }
 
@@ -133,6 +118,9 @@ const Kanban = (props: Props) => {
         }
     }
 
+    console.log(columns);
+
+
     return (
         <div>
             <div className='kanban-headers d-flex justify-content-between'>
@@ -144,8 +132,8 @@ const Kanban = (props: Props) => {
 
             <div className='kanban mt-3'>
                 <DragDropContext onDragEnd={onDragEnd}>
-                    {state.map((el, ind) => (
-                        <Droppable key={ind} droppableId={`${ind}`} isDropDisabled={!canEdit}>
+                    {Object.entries(columns).map(([column, tasks]) => (
+                        <Droppable key={column} droppableId={`${column}`} isDropDisabled={!canEdit}>
                             {(provided, snapshot) => (
                                 <div
                                     ref={provided.innerRef}
@@ -156,10 +144,10 @@ const Kanban = (props: Props) => {
                                         <p>hello</p>
                                         <FontAwesomeIcon icon={faPlus} size='2x' color='lightgrey' />
                                     </div>
-                                    {el.map((item, index) => (
+                                    {tasks.map((task, index) => (
                                         <Draggable
-                                            key={item.id}
-                                            draggableId={item.id}
+                                            key={task.id}
+                                            draggableId={task.id}
                                             index={index}
                                             isDragDisabled={!canEdit}
                                         >
@@ -174,7 +162,7 @@ const Kanban = (props: Props) => {
                                                     )}
                                                 >
                                                     <div className='d-flex'>
-                                                        {item.content}
+                                                        {task.content}
 
                                                     </div>
                                                 </div>

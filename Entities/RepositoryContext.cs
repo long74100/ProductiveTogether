@@ -12,7 +12,7 @@ namespace Entities
     public class RepositoryContext : IdentityDbContext<User>
     {
         public DbSet<Goal> Goals { get; set; }
-        public DbSet<GoalTask> GoalTasks { get; set; }
+        public DbSet<ActionItem> ActionItems { get; set; }
         public DbSet<Token> Tokens { get; set; }
         public RepositoryContext(DbContextOptions<RepositoryContext> options)
             : base(options)

@@ -2,9 +2,6 @@
 using Entities;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Repository
@@ -14,7 +11,7 @@ namespace Repository
         private readonly RepositoryContext _repositoryContext;
         private readonly UserManager<User> _userManager;
         private IGoalRepository _goal;
-        private IGoalTaskRepository _goalTask;
+        private IActionItemRepository _actionItem;
         private IUserRepository _user;
         private ITokenRepository _token;
 
@@ -37,16 +34,16 @@ namespace Repository
             }
         }
 
-        public IGoalTaskRepository GoalTask
+        public IActionItemRepository ActionItem
         {
             get
             {
-                if (_goalTask == null)
+                if (_actionItem == null)
                 {
-                    _goalTask = new GoalTaskRepository(_repositoryContext);
+                    _actionItem = new ActionItemRepository(_repositoryContext);
                 }
 
-                return _goalTask;
+                return _actionItem;
             }
         }
 
