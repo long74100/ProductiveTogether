@@ -36,7 +36,7 @@ namespace ProductiveTogether.API.Controllers
         }
 
         [HttpGet("{id}", Name = "ActionItemById")]
-        public string Get(int id)
+        public string Get(Guid id)
         {
             return "value";
         }
@@ -57,10 +57,20 @@ namespace ProductiveTogether.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(Guid id, [FromBody] ActionItemDto actionItem)
         {
+            if (id != actionItem.Id)
+            {
+                return BadRequest();
+            }
+            var actionItemEntity = _mapper.Map<ActionItem>(actionItem);
+            _repository.ActionItem.UpdateActionItem(actionItemEntity);
+            await _repository.SaveAsync();
+
+            return NoContent();
         }
 
+        // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

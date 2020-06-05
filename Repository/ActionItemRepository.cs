@@ -17,5 +17,10 @@ namespace Repository
         {
             Create(actionItem);
         }
+
+        public void UpdateActionItem(ActionItem actionItem)
+        {
+            Update(actionItem);
+        }
     }
 }

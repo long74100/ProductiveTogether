@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -50,6 +50,7 @@ const getListStyle = (isDraggingOver: boolean) => ({
 type Props = {
     goal: Goal,
     canEdit: boolean;
+    updateActionItem: (actionItem: ActionItem) => any;
 }
 
 const Kanban = (props: Props) => {
@@ -79,8 +80,13 @@ const Kanban = (props: Props) => {
             const items = reorder(actionItems[sInd], source.index, destination.index);
             setActionItems({ ...actionItems, [sInd]: items });
         } else {
-            const result = move(actionItems[sInd], actionItems[dInd], source, destination);
-            setActionItems({ ...actionItems, [sInd]: result[sInd], [dInd]: result[dInd] });
+            const actionItemId = result.draggableId;
+            const actionItem = goal.actionItems.find(ai => ai.id === actionItemId);
+            const moveResult = move(actionItems[sInd], actionItems[dInd], source, destination);
+            setActionItems({ ...actionItems, [sInd]: moveResult[sInd], [dInd]: moveResult[dInd] });
+            if (actionItem) {
+                props.updateActionItem({ ...actionItem, status: ActionItemStatus[dInd] });
+            }
         }
     }
 
@@ -114,7 +120,7 @@ const Kanban = (props: Props) => {
                         <div key={column + '-full'}>
                             <div className='d-flex justify-content-between'
                                 style={{ padding: '1em 8px', background: 'rgb(235, 236, 240)', borderRadius: '5px 5px 0 0' }}>
-                                <p className='mx-3'>hello</p>
+                                <p className='mx-3'>{column}</p>
                                 <FontAwesomeIcon className='mx-3' icon={faPlus} size='2x' color='lightgrey' />
                             </div>
                             <Droppable key={column} droppableId={`${column}`} isDropDisabled={!canEdit}>

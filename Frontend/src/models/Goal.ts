@@ -13,7 +13,7 @@ export interface ActionItem {
     description: string
 }
 
-export const ActionItemStatus = {
+export const ActionItemStatus: { [type: string]: number } = {
     Todo: 0,
     InProgress: 1,
     Complete: 2,

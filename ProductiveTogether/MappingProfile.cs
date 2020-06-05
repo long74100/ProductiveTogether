@@ -15,6 +15,7 @@ namespace ProductiveTogether.API
             // Goal Task
             CreateMap<ActionItem, ActionItemDto>();
             CreateMap<ActionItemForCreationDto, ActionItem>();
+            CreateMap<ActionItemDto, ActionItem>();
 
             // User
             CreateMap<User, UserDto>();
