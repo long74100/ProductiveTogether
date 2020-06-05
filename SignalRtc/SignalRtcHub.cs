@@ -1,14 +1,10 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using SignalRtc.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Text.RegularExpressions;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 
 namespace SignalRtc
 {
+    [Authorize]
     public class SignalRtcHub : Hub
     {
         public async Task AddToGroup(string userName, string groupName)

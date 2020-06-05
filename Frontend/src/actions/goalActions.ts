@@ -1,10 +1,12 @@
-import { Goal } from '../models/Goal';
+import { Goal, ActionItem } from '../models/Goal';
 import { getAllGoals, createDailyGoal } from '../services/goalService';
+import { putActionItem } from '../services/actionItem';
 import { normalizeData } from '../helper';
 import { PagedResult } from '../models/PagedResults';
 
 export const LOAD_ALL_DAILY_GOALS = 'LOAD_ALL_DAILY_GOALS';
 export const CREATE_DAILY_GOAL = 'CREATE_DAILY_GOAL';
+export const UPDATE_ACTION_ITEM = 'UPDATE_ACTION_ITEM';
 
 interface LoadAllDailyGoalsAction {
     type: typeof LOAD_ALL_DAILY_GOALS,
@@ -16,7 +18,12 @@ interface CreateDailyGoalAction {
     payload: Goal
 }
 
-export type GoalActiontypes = LoadAllDailyGoalsAction & CreateDailyGoalAction;
+interface UpdateActionItemAction {
+    type: typeof UPDATE_ACTION_ITEM,
+    payload: ActionItem
+}
+
+export type GoalActiontypes = LoadAllDailyGoalsAction & CreateDailyGoalAction & UpdateActionItemAction;
 
 export const loadAllDailyGoals = () => (dispatch: any) => {
     return getAllGoals().then((res: PagedResult<Goal>) => {
@@ -41,3 +48,15 @@ export const createDailyGoalForUser = (userId: string) => (dispatch: any) => {
         return res;
     })
 }
+
+export const updateActionItem = (actionItem: ActionItem) => (dispatch: any) => {
+    return putActionItem(actionItem).then((res: ActionItem) => {
+        dispatch({
+            type: UPDATE_ACTION_ITEM,
+            payload: actionItem
+        });
+
+        return res;
+    });
+}
+

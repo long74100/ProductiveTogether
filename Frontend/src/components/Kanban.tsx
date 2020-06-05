@@ -1,49 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
-import { Goal, GoalTask } from '../models/Goal';
+import { Goal, ActionItemStatus, ActionItem } from '../models/Goal';
 import { CreatableSingleSelect } from '../components';
 
-// fake data generator
-const getItems = (count: number, offset = 0, colName: string) => {
-    const tasks = Array.from({ length: 3 }, (v, k) => k).map(k => ({
-        id: `item-${k + offset}-${new Date().getTime()}`,
-        content: <div>`item ${k + offset}`</div>
-    }));
-    // tasks.push({
-    //     id: `add-${colName}`,
-    //     content: <FontAwesomeIcon icon={faPlus} size='2x' />
-    // });
-    return tasks;
-
-    // <button
-    //                                                         type='button'
-    //                                                         onClick={() => {
-    //                                                             const newState = [...state];
-    //                                                             newState[ind].splice(index, 1);
-    //                                                             setState(
-    //                                                                 newState.filter(group => group.length)
-    //                                                             );
-    //                                                         }}
-    //                                                     >
-    //                                                         delete
-    //                         </button>
-}
 
 const reorder = (list: any[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-
+    [result[startIndex], result[endIndex]] = [result[endIndex], result[startIndex]];
     return result;
 };
 
-/**
- * Moves an item from one list to another list.
- */
 const move = (source: any[], destination: any[], droppableSource: any, droppableDestination: any) => {
     const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
@@ -67,7 +36,7 @@ const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
     borderRadius: '2.5px',
 
     // change background colour if dragging
-    background: isDragging ? 'lightgreen' : '#fff',
+    background: '#fff',
 
     // styles we need to apply on draggables
     ...draggableStyle
@@ -81,41 +50,43 @@ const getListStyle = (isDraggingOver: boolean) => ({
 type Props = {
     goal: Goal,
     canEdit: boolean;
+    updateActionItem: (actionItem: ActionItem) => any;
 }
-
-const generateColumns = (tasks: GoalTask[]) => {
-
-}
-
 
 const Kanban = (props: Props) => {
 
     const { goal, canEdit } = props;
+    const bucketItems = (type: number) => goal.actionItems.filter(ai => ai.status === type);
 
-    const [state, setState] = useState([getItems(10, 0, 'Todo'), getItems(5, 10, 'In Progress'), getItems(11, 20, 'Complete'), getItems(30, 40, 'Revisit')]);
+    const actionItemBuckets: { [id: string]: ActionItem[] } = {
+        'Todo': bucketItems(ActionItemStatus.Todo),
+        'In Progress': bucketItems(ActionItemStatus.InProgress),
+        'Complete': bucketItems(ActionItemStatus.Complete),
+        'Revisit': bucketItems(ActionItemStatus.Revisit)
+    }
+
+    const [actionItems, setActionItems] = useState(actionItemBuckets);
 
     function onDragEnd(result: any) {
         const { source, destination } = result;
 
-        // dropped outside the list
         if (!destination) {
             return;
         }
-        const sInd = +source.droppableId;
-        const dInd = +destination.droppableId;
+        const sInd = source.droppableId;
+        const dInd = destination.droppableId;
 
         if (sInd === dInd) {
-            const items = reorder(state[sInd], source.index, destination.index);
-            const newState = [...state];
-            newState[sInd] = items;
-            setState(newState);
+            const items = reorder(actionItems[sInd], source.index, destination.index);
+            setActionItems({ ...actionItems, [sInd]: items });
         } else {
-            const result = move(state[sInd], state[dInd], source, destination);
-            const newState = [...state];
-            newState[sInd] = result[sInd];
-            newState[dInd] = result[dInd];
-
-            setState(newState.filter(group => group.length));
+            const actionItemId = result.draggableId;
+            const actionItem = goal.actionItems.find(ai => ai.id === actionItemId);
+            const moveResult = move(actionItems[sInd], actionItems[dInd], source, destination);
+            setActionItems({ ...actionItems, [sInd]: moveResult[sInd], [dInd]: moveResult[dInd] });
+            if (actionItem) {
+                props.updateActionItem({ ...actionItem, status: ActionItemStatus[dInd] });
+            }
         }
     }
 
@@ -133,6 +104,7 @@ const Kanban = (props: Props) => {
         }
     }
 
+
     return (
         <div>
             <div className='kanban-headers d-flex justify-content-between'>
@@ -144,48 +116,51 @@ const Kanban = (props: Props) => {
 
             <div className='kanban mt-3'>
                 <DragDropContext onDragEnd={onDragEnd}>
-                    {state.map((el, ind) => (
-                        <Droppable key={ind} droppableId={`${ind}`} isDropDisabled={!canEdit}>
-                            {(provided, snapshot) => (
-                                <div
-                                    ref={provided.innerRef}
-                                    style={getListStyle(snapshot.isDraggingOver)}
-                                    {...provided.droppableProps}
-                                >
-                                    <div className='d-flex justify-content-between' style={{ margin: '0px 1em 8px' }}>
-                                        <p>hello</p>
-                                        <FontAwesomeIcon icon={faPlus} size='2x' color='lightgrey' />
-                                    </div>
-                                    {el.map((item, index) => (
-                                        <Draggable
-                                            key={item.id}
-                                            draggableId={item.id}
-                                            index={index}
-                                            isDragDisabled={!canEdit}
-                                        >
-                                            {(provided, snapshot) => (
-                                                <div
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                    style={getItemStyle(
-                                                        snapshot.isDragging,
-                                                        provided.draggableProps.style
-                                                    )}
-                                                >
-                                                    <div className='d-flex'>
-                                                        {item.content}
+                    {Object.entries(actionItems).map(([column, ais]) => (
+                        <div key={column + '-full'}>
+                            <div className='d-flex justify-content-between'
+                                style={{ padding: '1em 8px', background: 'rgb(235, 236, 240)', borderRadius: '5px 5px 0 0' }}>
+                                <p className='mx-3'>{column}</p>
+                                <FontAwesomeIcon className='mx-3' icon={faPlus} size='2x' color='lightgrey' />
+                            </div>
+                            <Droppable key={column} droppableId={`${column}`} isDropDisabled={!canEdit}>
+                                {(provided, snapshot) => (
+                                    <div
+                                        ref={provided.innerRef}
+                                        style={getListStyle(snapshot.isDraggingOver)}
+                                        {...provided.droppableProps}
+                                    >
+                                        {ais.map((ai: ActionItem, index) => (
+                                            <Draggable
+                                                key={ai.id}
+                                                draggableId={ai.id}
+                                                index={index}
+                                                isDragDisabled={!canEdit}
+                                            >
+                                                {(provided, snapshot) => (
+                                                    <div
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                        style={getItemStyle(
+                                                            snapshot.isDragging,
+                                                            provided.draggableProps.style
+                                                        )}
+                                                    >
+                                                        <div className='d-flex'>
+                                                            {ai.description}
 
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            )}
-                                        </Draggable>
-                                    ))}
-                                    {provided.placeholder}
+                                                )}
+                                            </Draggable>
+                                        ))}
+                                        {provided.placeholder}
 
-                                </div>
-                            )}
-                        </Droppable>
+                                    </div>
+                                )}
+                            </Droppable>
+                        </div>
                     ))}
                 </DragDropContext>
             </div>

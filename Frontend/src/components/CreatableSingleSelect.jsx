@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import CreatableSelect from 'react-select/creatable';
 
 /**
- * Tsx version broken .-.
+ * Tsx version broken 
  */
 const CreatableSingleSelect = (props) => {
   const handleChange = ({ value }, actionMeta) => {

@@ -91,7 +91,7 @@ class LoginPage extends Component<Props, State> {
                         </div>
                         <div className='form-group'>
                             <label htmlFor='password'>Password</label>
-                            <input type='password' className='form-control' name='password' value={password} onChange={this.handleChange} />
+                            <input type='password' className='form-control' name='password' value={password} onChange={this.handleChange} autoComplete='on' />
                             {submitted && !password &&
                                 <div className='text-danger'>Password is required</div>
                             }

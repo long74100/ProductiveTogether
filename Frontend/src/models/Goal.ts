@@ -3,11 +3,19 @@ export interface Goal {
     userId: string,
     goalType: number,
     date: string
-    goalTasks: GoalTask[]
+    actionItems: ActionItem[]
 }
 
-export interface GoalTask {
+export interface ActionItem {
     id: string;
     status: number,
-    goalId: string
+    goalId: string,
+    description: string
+}
+
+export const ActionItemStatus: { [type: string]: number } = {
+    Todo: 0,
+    InProgress: 1,
+    Complete: 2,
+    Revisit: 3
 }

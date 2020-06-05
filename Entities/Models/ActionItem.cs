@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Models
 {
-    [Table("goal_task")]
-    public class GoalTask : TimeStampedEntity
+    [Table("action_item")]
+    public class ActionItem : TimeStampedEntity
     {
-        public enum GoalTaskStatus
+        public enum ActionItemStatus
         {
             ToDo,
             InProgress,
@@ -18,10 +18,10 @@ namespace Entities.Models
         [Key]
         public Guid Id { get; set; }
 
-        public GoalTaskStatus Status { get; set; }
+        public ActionItemStatus Status { get; set; }
 
         [Required]
-        public string description { get; set; }
+        public string Description { get; set; }
 
 
         [ForeignKey(nameof(Goal))]
