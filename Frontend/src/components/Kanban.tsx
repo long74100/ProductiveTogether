@@ -85,7 +85,7 @@ const Kanban = (props: Props) => {
             const moveResult = move(actionItems[sInd], actionItems[dInd], source, destination);
             setActionItems({ ...actionItems, [sInd]: moveResult[sInd], [dInd]: moveResult[dInd] });
             if (actionItem) {
-                props.updateActionItem({ ...actionItem, status: ActionItemStatus[dInd] });
+                props.updateActionItem({ ...actionItem, status: ActionItemStatus[dInd.replace(/\s/g, '')] });
             }
         }
     }

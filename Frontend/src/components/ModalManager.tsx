@@ -16,7 +16,8 @@ const mapDispatchToProps = (dispatch: any) => ({
 type StateProps = {
     isOpen: boolean,
     type: ModalType,
-    props: any
+    props: any,
+    showFooter?: boolean
 }
 
 type DispatchProps = {
@@ -40,6 +41,16 @@ const ModalManager = (props: Props) => {
             modalContent = <div>hello modal</div>
     }
 
+    const footer = props.showFooter ?
+                <Modal.Footer>
+                    <button className='btn btn-secondary' onClick={props.closeModal}>
+                        Close
+                    </button>
+                    <button className='btn btn-primary'>
+                        Save changes
+                    </button>
+                </Modal.Footer> : null;
+
     return (
         <ReactModal isOpen={props.isOpen} onRequestClose={props.closeModal}>
             <Modal.Header>
@@ -48,14 +59,7 @@ const ModalManager = (props: Props) => {
             <Modal.Body>
                 {modalContent}
             </Modal.Body>
-            <Modal.Footer>
-                <button className='btn btn-secondary' onClick={props.closeModal}>
-                    Close
-                </button>
-                <button className='btn btn-primary'>
-                    Save changes
-                </button>
-            </Modal.Footer>
+            { footer }
         </ReactModal>
     );
 }
