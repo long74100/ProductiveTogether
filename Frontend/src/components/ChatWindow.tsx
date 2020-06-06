@@ -14,8 +14,8 @@ const ChatWindow = (props: Props) => {
         return (
             <div className='chat-window'>
                 <div className='chat-header' onClick={() => props.minimize(props.chat.id)}>
-                    hello
-                <FontAwesomeIcon icon={faWindowClose} size='2x' onClick={() => props.close(props.chat.id)} />
+                    {props.chat.id}
+                    <FontAwesomeIcon icon={faWindowClose} size='2x' onClick={() => props.close(props.chat.id)} />
                 </div>
             </div>
         )
@@ -23,7 +23,7 @@ const ChatWindow = (props: Props) => {
         return (
             <div className='chat-window'>
                 <div className='chat-header' onClick={() => props.minimize(props.chat.id)}>
-                    hello
+                    {props.chat.id}
                     <FontAwesomeIcon icon={faWindowClose} size='2x' onClick={() => props.close(props.chat.id)} />
                 </div>
                 <p>hello</p>

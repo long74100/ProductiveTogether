@@ -1,10 +1,13 @@
 .chat-tabs {
     display: flex;
     position: absolute;
-    bottom: 2%;
+    bottom: 0;
+    right: 10%;
     width: 100%;
     flex-wrap: wrap;
     align-items: flex-end;
+    justify-content: flex-end;
+    z-index: 999;
 }
 
 .chat-header {

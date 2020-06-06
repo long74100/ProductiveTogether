@@ -10,6 +10,7 @@ import {
   DailyGoals,
   Footer,
   FocusRooms,
+  FriendList,
   HubConnection,
   Kanban,
   LoginPage,
@@ -23,16 +24,16 @@ import {
 import history from './history';
 
 const App = () => (
-  <div className="app">
+  <div className='app'>
     <Auth />
     <Router history={history}>
-      <div>
+      <div className='position-relative'>
         <PrivateComponent component={Nav} />
         <PrivateComponent component={ModalManager} />
         <PrivateComponent component={ChatTabs} />
-        <div className="app-body">
+        <div className='app-body position-relative'>
           <Switch>
-            <PrivateComponent exact path="/" component={DailyGoals} />
+            <PrivateComponent exact path='/' component={DailyGoals} />
             <PrivateComponent path='/dailygoal' component={Kanban} />
             <PrivateComponent path='/profile' component={UserProfile} />
             <PrivateComponent path='/focusrooms' component={FocusRooms} />
@@ -40,10 +41,11 @@ const App = () => (
             <PublicComponent path='/login' component={LoginPage} />
             <PublicComponent path='/Register' component={RegisterPage} />
           </Switch>
+          <PrivateComponent component={FriendList} />
         </div>
       </div>
     </Router>
-    <Footer />
+    {/* <Footer /> */}
   </div>
 );
 
