@@ -1,4 +1,5 @@
 import Auth from './Auth';
+import ChatTabs from './ChatTabs';
 import CustomButton from './CustomButton';
 import CreatableSingleSelect from './CreatableSingleSelect';
 import DailyGoals from './DailyGoals';
@@ -16,6 +17,7 @@ import UserProfile from './UserProfile';
 
 export {
     Auth,
+    ChatTabs,
     CustomButton,
     CreatableSingleSelect,
     DailyGoals,

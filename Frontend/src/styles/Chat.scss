@@ -1,0 +1,24 @@
+.chat-tabs {
+    display: flex;
+    position: absolute;
+    bottom: 2%;
+    width: 100%;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em;
+    border-bottom: 1px solid;
+}
+
+.chat-window {
+    min-width: 15%;
+    border: 1px solid;
+    margin: 0 0.5em;
+    border-radius: 5px 5px 0 0;
+    background: #fff;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
+}

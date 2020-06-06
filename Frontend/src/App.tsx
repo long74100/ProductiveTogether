@@ -1,9 +1,12 @@
 import React from 'react';
 
 import { Router, Switch } from 'react-router-dom'
+// @ts-ignore
+import { Launcher } from 'react-chat-window';
 
 import {
   Auth,
+  ChatTabs,
   DailyGoals,
   Footer,
   FocusRooms,
@@ -26,6 +29,7 @@ const App = () => (
       <div>
         <PrivateComponent component={Nav} />
         <PrivateComponent component={ModalManager} />
+        <PrivateComponent component={ChatTabs} />
         <div className="app-body">
           <Switch>
             <PrivateComponent exact path="/" component={DailyGoals} />
