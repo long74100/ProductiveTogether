@@ -27,7 +27,7 @@ namespace ProductiveTogether.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetAll()
         {
             var users = await _repository.User.GetAllUsersAsync();
             var usersResult = _mapper.Map<IEnumerable<UserDto>>(users);
@@ -36,7 +36,7 @@ namespace ProductiveTogether.API.Controllers
 
         // GET: api/User/5
         [HttpGet("{id}", Name = "UserById")]
-        public async Task<IActionResult> GetUserById(string id)
+        public async Task<IActionResult> Get(string id)
         {
             var user = await _repository.User.GetUserByIdAsync(id);
             
@@ -52,7 +52,7 @@ namespace ProductiveTogether.API.Controllers
 
         // POST: api/User
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] UserForCreationDto user)
+        public async Task<IActionResult> Create([FromBody] UserForCreationDto user)
         {
 
             var userEntity = _mapper.Map<User>(user);

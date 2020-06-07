@@ -1,5 +1,5 @@
 import { Goal } from '../models/Goal';
-import { LOAD_ALL_DAILY_GOALS, CREATE_DAILY_GOAL, UPDATE_ACTION_ITEM, GoalActiontypes } from '../actions/goalActions';
+import { LOAD_ALL_DAILY_GOALS, CREATE_DAILY_GOAL, UPDATE_ACTION_ITEM, CREATE_ACTION_ITEM, GoalActiontypes } from '../actions/goalActions';
 
 
 export interface GoalState {
@@ -31,6 +31,17 @@ export default (state = initialState, action: GoalActiontypes) => {
                 dailyGoals: {
                     ...state.dailyGoals,
                     [goal.id]: { ...goal, actionItems: [...goal.actionItems.filter(ai => ai.id !== actionItem.id), actionItem] }
+                }
+            }
+        case CREATE_ACTION_ITEM:
+            const createdActionitem = action.payload;
+            const goalForCreatedItem = state.dailyGoals[createdActionitem.goalId];
+
+            return {
+                ...state,
+                dailyGoals: {
+                    ...state.dailyGoals,
+                    [goalForCreatedItem.id]: { ...goalForCreatedItem, actionItems: [...goalForCreatedItem.actionItems, createdActionitem] }
                 }
             }
         default: return state

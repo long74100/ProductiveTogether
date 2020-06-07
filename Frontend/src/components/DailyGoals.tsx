@@ -4,7 +4,7 @@ import { CardDeck } from 'react-bootstrap';
 
 import { Goal, ActionItem } from '../models/Goal';
 import { User } from '../models/User';
-import { loadAllDailyGoals, createDailyGoalForUser, updateActionItem } from '../actions/goalActions';
+import { loadAllDailyGoals, createDailyGoalForUser, updateActionItem, createActionItem } from '../actions/goalActions';
 import { openModal, ModalType } from '../actions/modalActions';
 import GoalCard from './GoalCard';
 import { AppState } from '../reducers/rootReducer';
@@ -21,7 +21,8 @@ const mapDispatchToProps = (dispatch: any) => ({
     openModal: (modalType: ModalType, props: any) => dispatch(openModal(modalType, props)),
     loadDailyGoals: () => dispatch(loadAllDailyGoals()),
     createDailyGoal: (userId: string) => dispatch(createDailyGoalForUser(userId)),
-    updateActionItem: (actionItem: ActionItem) => dispatch(updateActionItem(actionItem))
+    updateActionItem: (actionItem: ActionItem) => dispatch(updateActionItem(actionItem)),
+    createActionItem: (actionItem: Partial<ActionItem>) => dispatch(createActionItem(actionItem))
 });
 
 type DispatchProps = {
@@ -29,6 +30,7 @@ type DispatchProps = {
     loadDailyGoals: () => Promise<Goal[]>,
     createDailyGoal: (userId: string) => Promise<Goal>
     updateActionItem: (actionItem: ActionItem) => Promise<ActionItem>
+    createActionItem: (actionItem: Partial<ActionItem>) => Promise<ActionItem>;
 }
 
 type StateProps = {
@@ -53,7 +55,7 @@ const DailyGoals = (props: Props) => {
     }
 
     const openViewGoalModal = (goal: Goal) => {
-        props.openModal(ModalType.ViewGoal, { goal, canEdit: goal.userId === props.currentUser.id, updateActionItem: props.updateActionItem });
+        props.openModal(ModalType.ViewGoal, { goal, canEdit: goal.userId === props.currentUser.id, updateActionItem: props.updateActionItem, createActionItem: props.createActionItem });
     }
 
     const goals = Object.entries(props.dailyGoals).map(([id, goal], index) => {
@@ -63,7 +65,7 @@ const DailyGoals = (props: Props) => {
             </div>
         );
     });
-
+    
     return (
         <div className='row'>
             <div className='col-12 text-right'>

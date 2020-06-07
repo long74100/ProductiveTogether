@@ -31,7 +31,7 @@ namespace ProductiveTogether.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllGoals([FromQuery] GoalParameters parameters)
+        public async Task<IActionResult> GetAll([FromQuery] GoalParameters parameters)
         {
             var goals = await _repository.Goal.GetAllGoalsAsync(parameters);
             var goalsResult = _mapper.Map<IEnumerable<GoalDto>>(goals);
@@ -51,7 +51,7 @@ namespace ProductiveTogether.API.Controllers
         }
 
         [HttpGet("{id}", Name = "GoalById")]
-        public async Task<IActionResult> GetGoalByIdAsync(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
 
             var goal = await _repository.Goal.GetGoalByIdAsync(id);
@@ -67,7 +67,7 @@ namespace ProductiveTogether.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateGoalAsync([FromBody]GoalForCreationDto goal)
+        public async Task<IActionResult> Create([FromBody]GoalForCreationDto goal)
         {
 
             var goalEntity = _mapper.Map<Goal>(goal);

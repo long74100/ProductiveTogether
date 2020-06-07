@@ -31,7 +31,7 @@ const App = () => (
         <PrivateComponent component={Nav} />
         <PrivateComponent component={ModalManager} />
         <PrivateComponent component={ChatTabs} />
-        <div className='app-body position-relative'>
+        <div className='app-body'>
           <Switch>
             <PrivateComponent exact path='/' component={DailyGoals} />
             <PrivateComponent path='/dailygoal' component={Kanban} />

@@ -20,6 +20,8 @@
 
 .app-body {
   min-height: 93vh;
+  position: relative;
+  z-index: 0;
 }
 
 .navbar {
