@@ -30,7 +30,12 @@ const ChatWindow = (props: Props) => {
                 <p>what?</p>
                 <p>huh</p>
                 <p>duh</p>
-                <input className='w-100 py-1' placeholder='Type a message...' />
+                <div className="input-group">
+                    <input className='w-75 py-1 form-control' placeholder='Type a message...' />
+                    <div className="input-group-append">
+                        <button className="btn btn-outline-secondary bg-warning text-white border-0" type="button">Send</button>
+                    </div>
+                </div>
             </div>
         );
     }

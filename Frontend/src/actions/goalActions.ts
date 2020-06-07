@@ -66,7 +66,6 @@ export const createActionItem = (actionItem: Partial<ActionItem>) => (dispatch: 
     })
 }
 
-
 export const updateActionItem = (actionItem: ActionItem) => (dispatch: any) => {
     return putActionItem(actionItem).then((res: ActionItem) => {
         dispatch({
