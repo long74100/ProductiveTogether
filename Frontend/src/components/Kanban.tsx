@@ -1,11 +1,11 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Goal, ActionItemStatus, ActionItem } from '../models/Goal';
 import { CreatableSingleSelect } from '../components';
-
+import { CustomButton } from '.';
 
 const reorder = (list: any[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
@@ -51,13 +51,14 @@ type Props = {
     goal: Goal,
     canEdit: boolean;
     updateActionItem: (actionItem: ActionItem) => any;
+    createActionItem: (actionItem: Partial<ActionItem>) => Promise<ActionItem>;
 }
 
 const Kanban = (props: Props) => {
 
     const { goal, canEdit } = props;
-    const bucketItems = (type: number) => goal.actionItems.filter(ai => ai.status === type);
 
+    const bucketItems = (type: number) => goal.actionItems.filter(ai => ai.status === type);
     const actionItemBuckets: { [id: string]: ActionItem[] } = {
         'Todo': bucketItems(ActionItemStatus.Todo),
         'In Progress': bucketItems(ActionItemStatus.InProgress),
@@ -66,8 +67,38 @@ const Kanban = (props: Props) => {
     }
 
     const [actionItems, setActionItems] = useState(actionItemBuckets);
+    const [showAddItem, setShowAddItem] = useState(false);
+    const [itemDescription, setitemDescription] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    function onDragEnd(result: any) {
+
+    const addActionItemBox = (column: string) => {
+        if (showAddItem && column == 'Todo') {
+            return (
+                <div>
+                    <textarea className="form-control" onChange={ev => setitemDescription(ev.target.value)} value={itemDescription}></textarea>
+                    <CustomButton className={'create-goal-btn'} loading={loading} text='Add item' onClick={addActionItem} />
+                </div>
+            )
+        }
+    }
+
+    const addActionItem = () => {
+        if (itemDescription) {
+            setLoading(true);
+            props.createActionItem({
+                goalId: goal.id,
+                description: itemDescription
+            }).then((res: ActionItem) => {
+                setLoading(false);
+                setActionItems({ ...actionItems, ['Todo']: [...actionItems.Todo, res] });
+                setShowAddItem(false);
+                setitemDescription('');
+            }).catch(error => setLoading(false));
+        }
+    }
+
+    const onDragEnd = (result: any) => {
         const { source, destination } = result;
 
         if (!destination) {
@@ -85,7 +116,7 @@ const Kanban = (props: Props) => {
             const moveResult = move(actionItems[sInd], actionItems[dInd], source, destination);
             setActionItems({ ...actionItems, [sInd]: moveResult[sInd], [dInd]: moveResult[dInd] });
             if (actionItem) {
-                props.updateActionItem({ ...actionItem, status: ActionItemStatus[dInd] });
+                props.updateActionItem({ ...actionItem, status: ActionItemStatus[dInd.replace(/\s/g, '')] });
             }
         }
     }
@@ -104,11 +135,9 @@ const Kanban = (props: Props) => {
         }
     }
 
-
     return (
         <div>
-            <div className='kanban-headers d-flex justify-content-between'>
-                <h1>hello</h1>
+            <div className='kanban-headers d-flex justify-content-end'>
                 <div className='select-background w-25'>
                     <CreatableSingleSelect options={backgroundOptions} handleChange={changeBackground} />
                 </div>
@@ -121,8 +150,11 @@ const Kanban = (props: Props) => {
                             <div className='d-flex justify-content-between'
                                 style={{ padding: '1em 8px', background: 'rgb(235, 236, 240)', borderRadius: '5px 5px 0 0' }}>
                                 <p className='mx-3'>{column}</p>
-                                <FontAwesomeIcon className='mx-3' icon={faPlus} size='2x' color='lightgrey' />
+                                {column === 'Todo' ?
+                                    <FontAwesomeIcon className='mx-3' icon={faPlus} size='2x' color='lightgrey' onClick={() => setShowAddItem(true)} />
+                                    : null}
                             </div>
+                            {addActionItemBox(column)}
                             <Droppable key={column} droppableId={`${column}`} isDropDisabled={!canEdit}>
                                 {(provided, snapshot) => (
                                     <div

@@ -28,21 +28,29 @@ namespace ProductiveTogether.API.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet("{id}", Name = "ActionItemById")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            var actionItem = await _repository.ActionItem.GetActionItemByIdAsync(id);
+
+            if (actionItem == null)
+            {
+                return NotFound();
+            }
+
+            var actionItemResult = _mapper.Map<ActionItemDto>(actionItem);
+
+            return Ok(actionItemResult);
+        }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<string> GetAll()
         {
             return new string[] { "value1", "value2" };
         }
 
-        [HttpGet("{id}", Name = "ActionItemById")]
-        public string Get(Guid id)
-        {
-            return "value";
-        }
-
         [HttpPost]
-        public async Task<IActionResult> CreateActionItemAsync([FromBody]ActionItemForCreationDto actionItem)
+        public async Task<IActionResult> Create([FromBody]ActionItemForCreationDto actionItem)
         {
 
             var actionItemEntity = _mapper.Map<ActionItem>(actionItem);
@@ -57,7 +65,7 @@ namespace ProductiveTogether.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] ActionItemDto actionItem)
+        public async Task<IActionResult> Update(Guid id, [FromBody] ActionItemDto actionItem)
         {
             if (id != actionItem.Id)
             {
