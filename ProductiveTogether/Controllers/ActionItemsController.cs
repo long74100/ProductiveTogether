@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
 
 namespace ProductiveTogether.API.Controllers
 {
@@ -17,19 +14,17 @@ namespace ProductiveTogether.API.Controllers
     public class ActionItemsController : ControllerBase
     {
 
-        private readonly ILogger _logger;
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
 
-        public ActionItemsController(ILogger logger, IRepositoryWrapper repository, IMapper mapper)
+        public ActionItemsController(IRepositoryWrapper repository, IMapper mapper)
         {
-            _logger = logger;
             _repository = repository;
             _mapper = mapper;
         }
 
         [HttpGet("{id}", Name = "ActionItemById")]
-        public async Task<IActionResult> Get(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var actionItem = await _repository.ActionItem.GetActionItemByIdAsync(id);
 
@@ -64,7 +59,7 @@ namespace ProductiveTogether.API.Controllers
 
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] ActionItemDto actionItem)
         {
             if (id != actionItem.Id)

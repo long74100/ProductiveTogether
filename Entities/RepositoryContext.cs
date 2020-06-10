@@ -14,6 +14,12 @@ namespace Entities
         public DbSet<Goal> Goals { get; set; }
         public DbSet<ActionItem> ActionItems { get; set; }
         public DbSet<Token> Tokens { get; set; }
+
+        public DbSet<Relationship> Relationships { get; set; }
+
+        public DbSet<ChatRoom> ChatRooms { get; set; }
+        public DbSet<Message> Messages { get; set; }
+
         public RepositoryContext(DbContextOptions<RepositoryContext> options)
             : base(options)
         {

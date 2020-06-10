@@ -1,7 +1,6 @@
 ﻿using Entities.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Entities.DataTransferObjects
 {
@@ -14,6 +13,8 @@ namespace Entities.DataTransferObjects
         public GoalType GoalType { get; set; }
 
         public DateTime Date { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
 
         public ICollection<ActionItemDto> ActionItems { get; set; }
     }

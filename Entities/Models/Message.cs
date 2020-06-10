@@ -8,7 +8,7 @@ namespace Entities.Models
 {
     [Table("message")]
 
-    class Message
+    public class Message : TimeStampedEntity
     {
         [Key]
         public Guid Id { get; set; }

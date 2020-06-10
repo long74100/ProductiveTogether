@@ -138,9 +138,11 @@ const Kanban = (props: Props) => {
     return (
         <div>
             <div className='kanban-headers d-flex justify-content-end'>
-                <div className='select-background w-25'>
-                    <CreatableSingleSelect options={backgroundOptions} handleChange={changeBackground} />
-                </div>
+                {props.canEdit ?
+                    <div className='select-background w-25'>
+                        <CreatableSingleSelect options={backgroundOptions} handleChange={changeBackground} />
+                    </div> : null
+                }
             </div>
 
             <div className='kanban mt-3'>

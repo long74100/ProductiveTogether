@@ -10,7 +10,7 @@ namespace Entities.Models
 
     [Table("chat_room")]
 
-    public class ChatRoom
+    public class ChatRoom : TimeStampedEntity
     {
         [Key]
         public Guid Id { get; set; }

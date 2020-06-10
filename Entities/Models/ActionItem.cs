@@ -23,9 +23,10 @@ namespace Entities.Models
         [Required]
         public string Description { get; set; }
 
-
         [ForeignKey(nameof(Goal))]
+
         public Guid GoalId { get; set; }
+
         public Goal Goal { get; set; }
     }
 }

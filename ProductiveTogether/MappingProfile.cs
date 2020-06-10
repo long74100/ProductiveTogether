@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Entities.DataTransferObjects;
+using Entities.DataTransferObjects.Relationship;
 using Entities.Models;
 
 namespace ProductiveTogether.API
@@ -21,6 +22,11 @@ namespace ProductiveTogether.API
             CreateMap<User, UserDto>();
             CreateMap<UserForCreationDto, User>();
             CreateMap<UserForLoginDto, User>();
+
+            // Relationship
+            CreateMap<RelationshipForCreationDto, Relationship>();
+            CreateMap<Relationship, RelationshipDto>();
+            CreateMap<RelationshipDto, Relationship>();
         }
     }
 }

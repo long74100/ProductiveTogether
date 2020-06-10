@@ -7,10 +7,11 @@ namespace Contracts
 {
     public interface IRepositoryWrapper
     {
-        IGoalRepository Goal { get; }
         IActionItemRepository ActionItem { get; }
+        IGoalRepository Goal { get; }
+        IRelationshipRepository Relationship { get; }
+        ITokenRepository Token { get; }
         IUserRepository User { get; }
-        ITokenRepository Token { get;  }
         Task SaveAsync();
     }
 }

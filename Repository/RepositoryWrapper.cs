@@ -14,6 +14,7 @@ namespace Repository
         private IActionItemRepository _actionItem;
         private IUserRepository _user;
         private ITokenRepository _token;
+        private IRelationshipRepository _relationship;
 
         public RepositoryWrapper(RepositoryContext repositoryContext, UserManager<User> userManager)
         {
@@ -74,6 +75,18 @@ namespace Repository
             }
         }
 
+        public IRelationshipRepository Relationship
+        {
+            get
+            {
+                if (_relationship == null)
+                {
+                    _relationship = new RelationshipRepository(_repositoryContext);
+                }
+
+                return _relationship;
+            }
+        }
 
         public async Task SaveAsync()
         {

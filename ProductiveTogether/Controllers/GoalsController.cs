@@ -19,13 +19,11 @@ namespace ProductiveTogether.API.Controllers
     [ApiController]
     public class GoalsController : ControllerBase
     {
-        private readonly ILogger _logger;
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
 
-        public GoalsController(ILogger logger, IRepositoryWrapper repository, IMapper mapper)
+        public GoalsController(IRepositoryWrapper repository, IMapper mapper)
         {
-            _logger = logger;
             _repository = repository;
             _mapper = mapper;
         }
